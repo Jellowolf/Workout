@@ -2,12 +2,14 @@ package com.personal.jello.workout.models;
 
 import java.util.Date;
 
+import androidx.databinding.BaseObservable;
+import androidx.databinding.Bindable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "weightTrainingRecord")
-public class WeightTrainingRecord {
+public class WeightTrainingRecord extends BaseObservable {
 
     @PrimaryKey(autoGenerate = true)
     public int id;
@@ -26,4 +28,34 @@ public class WeightTrainingRecord {
 
     @ColumnInfo(name = "date")
     public Date date;
+
+    @Bindable
+    public String getWeight() {
+        return Double.toString(this.weight);
+    }
+
+    public void setWeight(String value) {
+        if (value != null && !value.isEmpty() && this.weight != Double.parseDouble(value))
+            this.weight = Double.parseDouble(value);
+    }
+
+    @Bindable
+    public String getSets() {
+        return Integer.toString(this.sets);
+    }
+
+    public void setSets(String value) {
+        if (value != null && !value.isEmpty() && this.sets != Integer.parseInt(value))
+            this.sets = Integer.parseInt(value);
+    }
+
+    @Bindable
+    public String getReps() {
+        return Integer.toString(this.reps);
+    }
+
+    public void setReps(String value) {
+        if (value != null && !value.isEmpty() && this.reps != Integer.parseInt(value))
+            this.reps = Integer.parseInt(value);
+    }
 }

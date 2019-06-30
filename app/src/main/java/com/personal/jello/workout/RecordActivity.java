@@ -5,33 +5,39 @@ import android.content.Context;
 import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.personal.jello.workout.databinding.AddDialogBinding;
 import com.personal.jello.workout.models.WeightTrainingRecord;
+import com.personal.jello.workout.viewModels.RecordActivityViewModel;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProviders;
+
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 public class RecordActivity extends AppCompatActivity {
 
     final Context context = this;
     private ListView listView;
-    public WeightTrainingRecord record;
+    private static RecordActivityViewModel viewModel;
+    private static WeightTrainingRecord record;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        viewModel = ViewModelProviders.of(this).get(RecordActivityViewModel.class);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -39,7 +45,11 @@ public class RecordActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
 
                 final Dialog dialog = new Dialog(context);
-                dialog.setContentView(R.layout.add_dialog);
+                AddDialogBinding binding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.add_dialog, null, false);
+                dialog.setContentView(binding.getRoot());
+
+                record = new WeightTrainingRecord();
+                binding.setModel(record);
 
 
                 Button dialogButton = dialog.findViewById(R.id.dialog_button);
