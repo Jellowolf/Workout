@@ -1,8 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    style="@style/Dialog">
 
-    <ImageView
+    <androidx.appcompat.widget.DialogTitle
+        android:id="@+id/dialog_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bluh"/>
+
+    <ExpandableListView
+        android:id="@+id/dialog_types"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/dialog_title">
+    </ExpandableListView>
+
+    <NumberPicker
+        android:id="@+id/dialog_sets"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/dialog_types"/>
+
+    <NumberPicker
+        android:id="@+id/dialog_reps"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/dialog_sets"/>
+
+    <EditText
+        android:id="@+id/dialog_weight"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/dialog_reps"/>
+
+    <DatePicker
+        android:id="@+id/dialog_date"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/dialog_weight"/>
+
+    <!--<ImageView
         android:id="@+id/image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
@@ -11,7 +49,7 @@
         android:id="@+id/text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/image"/>
+        android:layout_below="@id/image"/>-->
 
     <Button
         android:id="@+id/dialog_button"
@@ -20,6 +58,6 @@
         android:text="Ok"
         android:layout_marginTop="5dp"
         android:layout_marginRight="5dp"
-        android:layout_below="@id/image"/>
+        android:layout_below="@id/dialog_date"/>
 
 </RelativeLayout>

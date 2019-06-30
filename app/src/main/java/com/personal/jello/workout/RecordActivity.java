@@ -5,6 +5,8 @@ import android.content.Context;
 import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.personal.jello.workout.models.WeightTrainingRecord;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.view.View;
@@ -20,6 +22,7 @@ public class RecordActivity extends AppCompatActivity {
 
     final Context context = this;
     private ListView listView;
+    public WeightTrainingRecord record;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,12 +40,7 @@ public class RecordActivity extends AppCompatActivity {
 
                 final Dialog dialog = new Dialog(context);
                 dialog.setContentView(R.layout.add_dialog);
-                dialog.setTitle("Gimme exercise info");
 
-                TextView text = dialog.findViewById(R.id.text);
-                text.setText("Bluh Bluh Bluh");
-                ImageView image = dialog.findViewById(R.id.image);
-                image.setImageResource(R.drawable.ic_launcher_foreground);
 
                 Button dialogButton = dialog.findViewById(R.id.dialog_button);
                 dialogButton.setOnClickListener(new View.OnClickListener() {
