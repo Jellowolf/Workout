@@ -12,14 +12,13 @@
             android:id="@+id/dialog_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Bluh"/>
+            android:text="Add Workout Record"/>
 
-        <ExpandableListView
+        <Spinner
             android:id="@+id/dialog_types"
             android:layout_width="300dp"
             android:layout_height="50dp"
-            android:layout_below="@id/dialog_title">
-        </ExpandableListView>
+            android:layout_below="@id/dialog_title"/>
 
         <EditText
             android:id="@+id/dialog_sets"
@@ -47,9 +46,14 @@
 
         <DatePicker
             android:id="@+id/dialog_date"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:layout_below="@id/dialog_weight"/>
+            android:layout_width="300dp"
+            android:layout_height="150dp"
+            android:layout_below="@id/dialog_weight"
+            android:datePickerMode="spinner"
+            android:calendarViewShown="false"
+            android:day="@={model.day}"
+            android:month="@={model.month}"
+            android:year="@={model.year}"/>
 
         <Button
             android:id="@+id/dialog_button"

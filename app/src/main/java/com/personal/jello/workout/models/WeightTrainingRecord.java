@@ -1,6 +1,6 @@
 package com.personal.jello.workout.models;
 
-import java.util.Date;
+import java.util.Calendar;
 
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
@@ -27,7 +27,7 @@ public class WeightTrainingRecord extends BaseObservable {
     public double weight;
 
     @ColumnInfo(name = "date")
-    public Date date;
+    public Calendar date;
 
     @Bindable
     public String getWeight() {
@@ -57,5 +57,32 @@ public class WeightTrainingRecord extends BaseObservable {
     public void setReps(String value) {
         if (value != null && !value.isEmpty() && this.reps != Integer.parseInt(value))
             this.reps = Integer.parseInt(value);
+    }
+
+    @Bindable
+    public int getDay() {
+        return date.get(Calendar.DAY_OF_MONTH);
+    }
+
+    public void setDay(int value) {
+        date.set(Calendar.DAY_OF_MONTH, value);
+    }
+
+    @Bindable
+    public int getMonth() {
+        return date.get(Calendar.MONTH);
+    }
+
+    public void setMonth(int value) {
+        date.set(Calendar.MONTH, value);
+    }
+
+    @Bindable
+    public int getYear() {
+        return date.get(Calendar.YEAR);
+    }
+
+    public void setYear(int value) {
+        date.set(Calendar.YEAR, value);
     }
 }
