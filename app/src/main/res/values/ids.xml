@@ -2,8 +2,13 @@
 <resources>
     <item type="id" name="dialog_title"/>
     <item type="id" name="dialog_types"/>
+    <item type="id" name="dialog_types_label"/>
     <item type="id" name="dialog_sets"/>
+    <item type="id" name="dialog_sets_label"/>
     <item type="id" name="dialog_reps"/>
+    <item type="id" name="dialog_reps_label"/>
     <item type="id" name="dialog_weight"/>
+    <item type="id" name="dialog_weight_label"/>
     <item type="id" name="dialog_date"/>
+    <item type="id" name="dialog_date_label"/>
 </resources>

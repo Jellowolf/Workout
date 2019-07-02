@@ -2,8 +2,8 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
         <variable
-            name="model"
-            type="com.personal.jello.workout.models.WeightTrainingRecord"/>
+            name="viewModel"
+            type="com.personal.jello.workout.viewModels.RecordActivityViewModel"/>
     </data>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -17,31 +17,56 @@
         <Spinner
             android:id="@+id/dialog_types"
             android:layout_width="300dp"
-            android:layout_height="50dp"
-            android:layout_below="@id/dialog_title"/>
+            android:layout_height="wrap_content"
+            android:layout_below="@id/dialog_title"
+            android:onItemSelected="@{(parent, view, pos, id)->viewModel.onTypeSelected(parent, view, pos, id)}"/>
+
+        <TextView
+            android:id="@+id/dialog_sets_label"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:labelFor="@id/dialog_sets"
+            android:layout_below="@id/dialog_types"
+            android:text="Sets"/>
 
         <EditText
             android:id="@+id/dialog_sets"
             android:layout_width="300dp"
-            android:layout_height="50dp"
-            android:layout_below="@id/dialog_types"
-            android:text="@={model.sets}"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/dialog_sets_label"
+            android:text="@={viewModel.record.sets}"
             android:inputType="number"/>
+
+        <TextView
+            android:id="@+id/dialog_reps_label"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:labelFor="@id/dialog_reps"
+            android:layout_below="@id/dialog_sets"
+            android:text="Reps"/>
 
         <EditText
             android:id="@+id/dialog_reps"
             android:layout_width="300dp"
-            android:layout_height="50dp"
-            android:layout_below="@id/dialog_sets"
-            android:text="@={model.reps}"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/dialog_reps_label"
+            android:text="@={viewModel.record.reps}"
             android:inputType="number"/>
+
+        <TextView
+            android:id="@+id/dialog_weight_label"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:labelFor="@id/dialog_weight"
+            android:layout_below="@id/dialog_reps"
+            android:text="Weight"/>
 
         <EditText
             android:id="@+id/dialog_weight"
             android:layout_width="300dp"
-            android:layout_height="50dp"
-            android:layout_below="@id/dialog_reps"
-            android:text="@={model.weight}"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/dialog_weight_label"
+            android:text="@={viewModel.record.weight}"
             android:inputType="numberDecimal"/>
 
         <DatePicker
@@ -51,9 +76,9 @@
             android:layout_below="@id/dialog_weight"
             android:datePickerMode="spinner"
             android:calendarViewShown="false"
-            android:day="@={model.day}"
-            android:month="@={model.month}"
-            android:year="@={model.year}"/>
+            android:day="@={viewModel.record.day}"
+            android:month="@={viewModel.record.month}"
+            android:year="@={viewModel.record.year}"/>
 
         <Button
             android:id="@+id/dialog_button"

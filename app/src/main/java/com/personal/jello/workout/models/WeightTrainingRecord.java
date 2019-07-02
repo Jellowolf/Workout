@@ -61,28 +61,28 @@ public class WeightTrainingRecord extends BaseObservable {
 
     @Bindable
     public int getDay() {
-        return date.get(Calendar.DAY_OF_MONTH);
+        return this.date.get(Calendar.DAY_OF_MONTH);
     }
 
     public void setDay(int value) {
-        date.set(Calendar.DAY_OF_MONTH, value);
+        this.date.set(Calendar.DAY_OF_MONTH, value);
     }
 
     @Bindable
     public int getMonth() {
-        return date.get(Calendar.MONTH);
+        return this.date.get(Calendar.MONTH);
     }
 
     public void setMonth(int value) {
-        date.set(Calendar.MONTH, value);
+        this.date.set(Calendar.MONTH, value);
     }
 
     @Bindable
     public int getYear() {
-        return date.get(Calendar.YEAR);
+        return this.date.get(Calendar.YEAR);
     }
 
     public void setYear(int value) {
-        date.set(Calendar.YEAR, value);
+        this.date.set(Calendar.YEAR, value);
     }
 }
