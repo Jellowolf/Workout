@@ -35,7 +35,7 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/dialog_sets_label"
-            android:text="@={viewModel.record.sets}"
+            android:text="@={viewModel.record.general.sets}"
             android:inputType="number"/>
 
         <TextView
@@ -51,7 +51,7 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/dialog_reps_label"
-            android:text="@={viewModel.record.reps}"
+            android:text="@={viewModel.record.general.reps}"
             android:inputType="number"/>
 
         <TextView
@@ -67,7 +67,7 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/dialog_weight_label"
-            android:text="@={viewModel.record.weight}"
+            android:text="@={viewModel.record.general.weight}"
             android:inputType="numberDecimal"/>
 
         <DatePicker
@@ -77,9 +77,9 @@
             android:layout_below="@id/dialog_weight"
             android:datePickerMode="spinner"
             android:calendarViewShown="false"
-            android:day="@={viewModel.record.day}"
-            android:month="@={viewModel.record.month}"
-            android:year="@={viewModel.record.year}"/>
+            android:day="@={viewModel.record.general.day}"
+            android:month="@={viewModel.record.general.month}"
+            android:year="@={viewModel.record.general.year}"/>
 
         <Button
             android:id="@+id/dialog_save_button"

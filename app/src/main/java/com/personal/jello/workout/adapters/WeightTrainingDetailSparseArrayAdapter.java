@@ -7,14 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.personal.jello.workout.models.WeightTrainingRecord;
+import com.personal.jello.workout.models.WeightTrainingRecordDetail;
 
 import java.text.SimpleDateFormat;
 
-public class WeightTrainingRecordSparseArrayAdapter extends SparseArrayAdapter<WeightTrainingRecord> {
+public class WeightTrainingDetailSparseArrayAdapter extends SparseArrayAdapter<WeightTrainingRecordDetail> {
 
     private final LayoutInflater inflater;
-    public WeightTrainingRecordSparseArrayAdapter(Context context, SparseArray<WeightTrainingRecord> data) {
+    public WeightTrainingDetailSparseArrayAdapter(Context context, SparseArray<WeightTrainingRecordDetail> data) {
         inflater = LayoutInflater.from(context);
         setData(data);
     }
@@ -25,9 +25,9 @@ public class WeightTrainingRecordSparseArrayAdapter extends SparseArrayAdapter<W
         if (result == null) {
             result = (TextView) inflater.inflate(android.R.layout.simple_list_item_1, null);
         }
-        WeightTrainingRecord record = getItem(position);
+        WeightTrainingRecordDetail record = getItem(position);
         SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy hh:mm:ss");
-        result.setText(record.type.toString() + " - " + formatter.format(record.date.getTime()));
+        result.setText(record.type.toString() + " - " + formatter.format(record.general.date.getTime()));
         return result;
     }
 }

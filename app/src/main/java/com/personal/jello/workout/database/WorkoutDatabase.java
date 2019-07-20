@@ -7,15 +7,18 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
-import com.personal.jello.workout.dataAccess.WeightTrainingDao;
-import com.personal.jello.workout.models.WeightTrainingRecord;
+import com.personal.jello.workout.dataAccess.WeightTrainingRecordDao;
+import com.personal.jello.workout.dataAccess.WeightTrainingTypeDao;
+import com.personal.jello.workout.models.WeightTrainingRecordGeneral;
+import com.personal.jello.workout.models.WeightTrainingType;
 import com.personal.jello.workout.utility.Converters;
 
-@Database(entities = {WeightTrainingRecord.class}, version = 1)
+@Database(entities = {WeightTrainingRecordGeneral.class, WeightTrainingType.class}, version = 2)
 @TypeConverters({Converters.class})
 public abstract class WorkoutDatabase extends RoomDatabase {
     private static WorkoutDatabase INSTANCE;
-    public abstract WeightTrainingDao weightTrainingDao();
+    public abstract WeightTrainingRecordDao weightTrainingRecordDao();
+    public abstract WeightTrainingTypeDao weightTrainingTypeDao();
 
     public static WorkoutDatabase getWorkoutDatabase(Context context) {
         if (INSTANCE == null) {

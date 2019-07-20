@@ -1,17 +1,21 @@
 package com.personal.jello.workout.models;
 
-public enum WeightTrainingType {
-    ArmCurl("Arm Curl"),
-    ArmExtension("Arm Extension");
+import androidx.databinding.BaseObservable;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
-    private final String name;
+@Entity(tableName = "weightTrainingType")
+public class WeightTrainingType extends BaseObservable {
 
-    WeightTrainingType(String name) {
-        this.name = name;
-    }
+    @PrimaryKey(autoGenerate = true)
+    public Integer typeId;
+
+    @ColumnInfo(name = "description")
+    public String description;
 
     @Override
     public String toString() {
-        return name;
+        return description;
     }
 }

@@ -9,15 +9,15 @@ import java.util.Date;
 
 public class Converters {
 
-    @TypeConverter
-    public static int WeightTrainingTypeToInt(WeightTrainingType type) {
-        return type.ordinal();
+    /*@TypeConverter
+    public static Integer WeightTrainingTypeToInteger(WeightTrainingType type) {
+        return type.id;
     }
 
     @TypeConverter
-    public static WeightTrainingType IntToWeightTrainingType(int type) {
+    public static WeightTrainingType IntegerToWeightTrainingType(int type) {
         return WeightTrainingType.values()[type];
-    }
+    }*/
 
     @TypeConverter
     public static String CalendarToTimestamp(Calendar calendar) {

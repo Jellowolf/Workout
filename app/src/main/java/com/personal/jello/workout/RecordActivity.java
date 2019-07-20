@@ -3,16 +3,19 @@ package com.personal.jello.workout;
 import android.app.Dialog;
 import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.personal.jello.workout.adapters.WeightTrainingRecordSparseArrayAdapter;
+import com.personal.jello.workout.adapters.WeightTrainingDetailSparseArrayAdapter;
 import com.personal.jello.workout.databinding.AddDialogBinding;
-import com.personal.jello.workout.models.WeightTrainingRecord;
+import com.personal.jello.workout.models.WeightTrainingRecordDetail;
+import com.personal.jello.workout.models.WeightTrainingRecordGeneral;
 import com.personal.jello.workout.models.WeightTrainingType;
+import com.personal.jello.workout.services.WeightTrainingRecordService;
+import com.personal.jello.workout.services.WeightTrainingTypeService;
 import com.personal.jello.workout.viewModels.RecordActivityViewModel;
-import com.personal.jello.workout.viewModels.RecordActivityViewModelFactory;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.util.SparseArray;
@@ -34,6 +37,8 @@ public class RecordActivity extends AppCompatActivity {
     final RecordActivity activity = this;
     private ListView listView;
     private static RecordActivityViewModel viewModel;
+    private static WeightTrainingRecordService recordService;
+    private static WeightTrainingTypeService typeService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +46,9 @@ public class RecordActivity extends AppCompatActivity {
         setContentView(R.layout.activity_record);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        viewModel = ViewModelProviders.of(this, new RecordActivityViewModelFactory(this.getApplication())).get(RecordActivityViewModel.class);
+        viewModel = ViewModelProviders.of(this, new ViewModelProvider.AndroidViewModelFactory(this.getApplication())).get(RecordActivityViewModel.class);
+        recordService = new WeightTrainingRecordService(this.getApplication());
+        typeService = new WeightTrainingTypeService(this.getApplication());
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -51,20 +58,26 @@ public class RecordActivity extends AppCompatActivity {
                 AddDialogBinding binding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.add_dialog, null, false);
                 dialog.setContentView(binding.getRoot());
 
-                viewModel.record = new WeightTrainingRecord();
-                viewModel.record.date = Calendar.getInstance();
+                viewModel.record = new WeightTrainingRecordDetail();
+                viewModel.record.general = new WeightTrainingRecordGeneral();
+                viewModel.record.general.date = Calendar.getInstance();
                 binding.setViewModel(viewModel);
                 binding.setLifecycleOwner(activity);
 
+                // uncomment to add a new type until I make a new type saving workflow
+                //WeightTrainingType type = new WeightTrainingType();
+                //type.description = "Bluh";
+                //typeService.saveType(type);
+
                 Spinner spinner = dialog.findViewById(R.id.dialog_types);
-                ArrayAdapter<WeightTrainingType> adapter = new ArrayAdapter<>(activity, android.R.layout.simple_list_item_1, android.R.id.text1, WeightTrainingType.values());
+                ArrayAdapter<WeightTrainingType> adapter = new ArrayAdapter<>(activity, android.R.layout.simple_list_item_1, android.R.id.text1, typeService.getAllTypes());
                 spinner.setAdapter(adapter);
 
                 Button saveButton = dialog.findViewById(R.id.dialog_save_button);
                 saveButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        viewModel.saveRecord();
+                        recordService.saveRecord(viewModel.record.general);
                         resetList();
                         viewModel.record = null;
                         dialog.dismiss();
@@ -74,12 +87,12 @@ public class RecordActivity extends AppCompatActivity {
             }
         });
         listView = findViewById(R.id.list);
-        WeightTrainingRecordSparseArrayAdapter adapter = new WeightTrainingRecordSparseArrayAdapter(this, getRecordArray());
+        WeightTrainingDetailSparseArrayAdapter adapter = new WeightTrainingDetailSparseArrayAdapter(this, getRecordArray());
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                viewModel.record = (WeightTrainingRecord)parent.getAdapter().getItem(position);
+                viewModel.record = (WeightTrainingRecordDetail)parent.getAdapter().getItem(position);
 
                 // Temporarily recycling the dialog code from above
                 final Dialog dialog = new Dialog(activity);
@@ -88,7 +101,7 @@ public class RecordActivity extends AppCompatActivity {
 
                 // Set the data source before the viewmodel, or the newValue binding will not work
                 Spinner spinner = dialog.findViewById(R.id.dialog_types);
-                ArrayAdapter<WeightTrainingType> adapter = new ArrayAdapter<>(activity, android.R.layout.simple_list_item_1, android.R.id.text1, WeightTrainingType.values());
+                ArrayAdapter<WeightTrainingType> adapter = new ArrayAdapter<>(activity, android.R.layout.simple_list_item_1, android.R.id.text1, typeService.getAllTypes());
                 spinner.setAdapter(adapter);
 
                 binding.setViewModel(viewModel);
@@ -98,7 +111,7 @@ public class RecordActivity extends AppCompatActivity {
                 saveButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        viewModel.updateRecord();
+                        recordService.updateRecord(viewModel.record.general);
                         resetList();
                         viewModel.record = null;
                         dialog.dismiss();
@@ -109,7 +122,7 @@ public class RecordActivity extends AppCompatActivity {
                 deleteButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        viewModel.deleteRecord();
+                        recordService.deleteRecord(viewModel.record.general);
                         resetList();
                         viewModel.record = null;
                         dialog.dismiss();
@@ -142,9 +155,10 @@ public class RecordActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private SparseArray<WeightTrainingRecord> getRecordArray() {
-        List<WeightTrainingRecord> records = viewModel.getAllRecords();
-        SparseArray<WeightTrainingRecord> recordArray = new SparseArray<>();
+    private SparseArray<WeightTrainingRecordDetail> getRecordArray() {
+        List<WeightTrainingRecordDetail> records = recordService.getAllDetails();
+        List<WeightTrainingRecordGeneral> general = recordService.getAllRecords();
+        SparseArray<WeightTrainingRecordDetail> recordArray = new SparseArray<>();
         for (int i = 0; i < records.size(); i++) {
             recordArray.put(i, records.get(i));
         }
@@ -153,7 +167,7 @@ public class RecordActivity extends AppCompatActivity {
 
     private void resetList() {
         //this is horrendous, I need to set up notifying/updating properly
-        WeightTrainingRecordSparseArrayAdapter adapter = new WeightTrainingRecordSparseArrayAdapter(activity, getRecordArray());
+        WeightTrainingDetailSparseArrayAdapter adapter = new WeightTrainingDetailSparseArrayAdapter(activity, getRecordArray());
         listView.setAdapter(adapter);
     }
 }

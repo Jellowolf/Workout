@@ -6,16 +6,19 @@ import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "weightTrainingRecord")
-public class WeightTrainingRecord extends BaseObservable {
+@Entity(tableName = "weightTrainingRecord", indices = {@Index(value = "type_id")},
+        foreignKeys = @ForeignKey(entity = WeightTrainingType.class, parentColumns = "typeId", childColumns = "type_id"))
+public class WeightTrainingRecordGeneral extends BaseObservable {
 
     @PrimaryKey(autoGenerate = true)
-    public Integer id;
+    public Integer recordId;
 
-    @ColumnInfo(name = "type")
-    public WeightTrainingType type;
+    @ColumnInfo(name = "type_id")
+    public Integer typeId;
 
     @ColumnInfo(name = "sets")
     public Integer sets;
