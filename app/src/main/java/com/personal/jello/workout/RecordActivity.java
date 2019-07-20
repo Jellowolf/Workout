@@ -7,6 +7,7 @@ import com.personal.jello.workout.databinding.AddDialogBinding;
 import com.personal.jello.workout.models.WeightTrainingRecord;
 import com.personal.jello.workout.models.WeightTrainingType;
 import com.personal.jello.workout.viewModels.RecordActivityViewModel;
+import com.personal.jello.workout.viewModels.RecordActivityViewModelFactory;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -36,7 +37,7 @@ public class RecordActivity extends AppCompatActivity {
         setContentView(R.layout.activity_record);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        viewModel = ViewModelProviders.of(this).get(RecordActivityViewModel.class);
+        viewModel = ViewModelProviders.of(this, new RecordActivityViewModelFactory(this.getApplication())).get(RecordActivityViewModel.class);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -55,14 +56,14 @@ public class RecordActivity extends AppCompatActivity {
                 ArrayAdapter<WeightTrainingType> adapter = new ArrayAdapter<>(activity, android.R.layout.simple_list_item_1, android.R.id.text1, WeightTrainingType.values());
                 spinner.setAdapter(adapter);
 
-                Button dialogButton = dialog.findViewById(R.id.dialog_button);
+                /*Button dialogButton = dialog.findViewById(R.id.dialog_button);
                 dialogButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         viewModel.record = null;
                         dialog.dismiss();
                     }
-                });
+                });*/
                 dialog.show();
             }
         });

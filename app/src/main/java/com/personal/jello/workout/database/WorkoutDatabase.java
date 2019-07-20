@@ -11,7 +11,7 @@ import com.personal.jello.workout.dataAccess.WeightTrainingDao;
 import com.personal.jello.workout.models.WeightTrainingRecord;
 import com.personal.jello.workout.utility.Converters;
 
-@Database(entities = {WeightTrainingRecord.class}, version = 1, exportSchema = false)
+@Database(entities = {WeightTrainingRecord.class}, version = 1)
 @TypeConverters({Converters.class})
 public abstract class WorkoutDatabase extends RoomDatabase {
     private static WorkoutDatabase INSTANCE;

@@ -20,14 +20,14 @@ public class Converters {
     }
 
     @TypeConverter
-    public static Date CalendarToTimestamp(Calendar calendar) {
-        return calendar.getTime();
+    public static String CalendarToTimestamp(Calendar calendar) {
+        return calendar != null ? Long.toString(calendar.getTimeInMillis()/1000) : null;
     }
 
     @TypeConverter
-    public static Calendar Time(Date date) {
+    public static Calendar CalendarFromTimestamp(String timestamp) {
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
+        calendar.setTimeInMillis(Long.parseLong(timestamp)*1000);
         return calendar;
     }
 }
