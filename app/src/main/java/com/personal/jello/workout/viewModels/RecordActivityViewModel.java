@@ -25,6 +25,10 @@ public class RecordActivityViewModel extends AndroidViewModel {
         record.type = (WeightTrainingType)parent.getAdapter().getItem(pos);
     }
 
+    public void getRecord() {
+        record = workoutRepository.getAllRecords().get(0);
+    }
+
     public List<WeightTrainingRecord> getAllRecords() {
         return workoutRepository.getAllRecords();
     }
@@ -37,7 +41,8 @@ public class RecordActivityViewModel extends AndroidViewModel {
         workoutRepository.updateRecord(record);
     }
 
-    public void getRecord() {
-        record = workoutRepository.getAllRecords().get(0);
+    public void deleteRecord() {
+        workoutRepository.deleteRecord(record);
     }
+
 }

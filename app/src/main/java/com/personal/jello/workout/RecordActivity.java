@@ -60,11 +60,12 @@ public class RecordActivity extends AppCompatActivity {
                 ArrayAdapter<WeightTrainingType> adapter = new ArrayAdapter<>(activity, android.R.layout.simple_list_item_1, android.R.id.text1, WeightTrainingType.values());
                 spinner.setAdapter(adapter);
 
-                Button dialogButton = dialog.findViewById(R.id.dialog_button);
-                dialogButton.setOnClickListener(new View.OnClickListener() {
+                Button saveButton = dialog.findViewById(R.id.dialog_save_button);
+                saveButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         viewModel.saveRecord();
+                        resetList();
                         viewModel.record = null;
                         dialog.dismiss();
                     }
@@ -85,23 +86,31 @@ public class RecordActivity extends AppCompatActivity {
                 AddDialogBinding binding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.add_dialog, null, false);
                 dialog.setContentView(binding.getRoot());
 
-                binding.setViewModel(viewModel);
-                binding.setLifecycleOwner(activity);
-
+                // Set the data source before the viewmodel, or the newValue binding will not work
                 Spinner spinner = dialog.findViewById(R.id.dialog_types);
                 ArrayAdapter<WeightTrainingType> adapter = new ArrayAdapter<>(activity, android.R.layout.simple_list_item_1, android.R.id.text1, WeightTrainingType.values());
                 spinner.setAdapter(adapter);
 
-                Button dialogButton = dialog.findViewById(R.id.dialog_button);
-                dialogButton.setOnClickListener(new View.OnClickListener() {
+                binding.setViewModel(viewModel);
+                binding.setLifecycleOwner(activity);
+
+                Button saveButton = dialog.findViewById(R.id.dialog_save_button);
+                saveButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         viewModel.updateRecord();
+                        resetList();
+                        viewModel.record = null;
+                        dialog.dismiss();
+                    }
+                });
 
-                        //this is horrendous, I need to set up notifying/updating properly
-                        WeightTrainingRecordSparseArrayAdapter adapter = new WeightTrainingRecordSparseArrayAdapter(activity, getRecordArray());
-                        listView.setAdapter(adapter);
-
+                Button deleteButton = dialog.findViewById(R.id.dialog_delete_button);
+                deleteButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        viewModel.deleteRecord();
+                        resetList();
                         viewModel.record = null;
                         dialog.dismiss();
                     }
@@ -140,5 +149,11 @@ public class RecordActivity extends AppCompatActivity {
             recordArray.put(i, records.get(i));
         }
         return recordArray;
+    }
+
+    private void resetList() {
+        //this is horrendous, I need to set up notifying/updating properly
+        WeightTrainingRecordSparseArrayAdapter adapter = new WeightTrainingRecordSparseArrayAdapter(activity, getRecordArray());
+        listView.setAdapter(adapter);
     }
 }

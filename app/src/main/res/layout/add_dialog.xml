@@ -19,6 +19,7 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/dialog_title"
+            android:newValue="@{viewModel.record.type}"
             android:onItemSelected="@{(parent, view, pos, id)->viewModel.onTypeSelected(parent, view, pos, id)}"/>
 
         <TextView
@@ -81,12 +82,22 @@
             android:year="@={viewModel.record.year}"/>
 
         <Button
-            android:id="@+id/dialog_button"
+            android:id="@+id/dialog_save_button"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="Ok"
+            android:text="Save"
             android:layout_marginTop="5dp"
             android:layout_marginRight="5dp"
+            android:layout_below="@id/dialog_date"/>
+
+        <Button
+            android:id="@+id/dialog_delete_button"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Delete"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_toRightOf="@id/dialog_save_button"
             android:layout_below="@id/dialog_date"/>
     </RelativeLayout>
 </layout>

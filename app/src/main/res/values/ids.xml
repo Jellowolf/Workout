@@ -11,4 +11,6 @@
     <item type="id" name="dialog_weight_label"/>
     <item type="id" name="dialog_date"/>
     <item type="id" name="dialog_date_label"/>
+    <item type="id" name="dialog_save_button"/>
+    <item type="id" name="dialog_delete_button"/>
 </resources>

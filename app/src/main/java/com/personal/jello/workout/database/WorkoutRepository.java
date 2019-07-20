@@ -77,4 +77,22 @@ public class WorkoutRepository {
             return null;
         }
     }
+
+    public void deleteRecord(WeightTrainingRecord record) {
+        new deleteAsyncTask(weightTrainingDao).execute(record);
+    }
+
+    private static class deleteAsyncTask extends AsyncTask<WeightTrainingRecord, Void, Void> {
+        private WeightTrainingDao weightTrainingAsyncTaskDao;
+
+        deleteAsyncTask(WeightTrainingDao dao) {
+            weightTrainingAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(final WeightTrainingRecord... params) {
+            weightTrainingAsyncTaskDao.delete(params[0]);
+            return null;
+        }
+    }
 }
