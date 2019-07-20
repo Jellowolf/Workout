@@ -3,6 +3,7 @@ package com.personal.jello.workout;
 import android.app.Dialog;
 import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.personal.jello.workout.adapters.WeightTrainingRecordSparseArrayAdapter;
 import com.personal.jello.workout.databinding.AddDialogBinding;
 import com.personal.jello.workout.models.WeightTrainingRecord;
 import com.personal.jello.workout.models.WeightTrainingType;
@@ -14,16 +15,19 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 
 import java.util.Calendar;
+import java.util.List;
 
 public class RecordActivity extends AppCompatActivity {
 
@@ -56,26 +60,55 @@ public class RecordActivity extends AppCompatActivity {
                 ArrayAdapter<WeightTrainingType> adapter = new ArrayAdapter<>(activity, android.R.layout.simple_list_item_1, android.R.id.text1, WeightTrainingType.values());
                 spinner.setAdapter(adapter);
 
-                /*Button dialogButton = dialog.findViewById(R.id.dialog_button);
+                Button dialogButton = dialog.findViewById(R.id.dialog_button);
                 dialogButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        viewModel.saveRecord();
                         viewModel.record = null;
                         dialog.dismiss();
                     }
-                });*/
+                });
                 dialog.show();
             }
         });
-
         listView = findViewById(R.id.list);
-        String[] listValues = new String[] {
-                "Bluh",
-                "Bleh",
-                "Blah"
-        };
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1, listValues);
+        WeightTrainingRecordSparseArrayAdapter adapter = new WeightTrainingRecordSparseArrayAdapter(this, getRecordArray());
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                viewModel.record = (WeightTrainingRecord)parent.getAdapter().getItem(position);
+
+                // Temporarily recycling the dialog code from above
+                final Dialog dialog = new Dialog(activity);
+                AddDialogBinding binding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.add_dialog, null, false);
+                dialog.setContentView(binding.getRoot());
+
+                binding.setViewModel(viewModel);
+                binding.setLifecycleOwner(activity);
+
+                Spinner spinner = dialog.findViewById(R.id.dialog_types);
+                ArrayAdapter<WeightTrainingType> adapter = new ArrayAdapter<>(activity, android.R.layout.simple_list_item_1, android.R.id.text1, WeightTrainingType.values());
+                spinner.setAdapter(adapter);
+
+                Button dialogButton = dialog.findViewById(R.id.dialog_button);
+                dialogButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        viewModel.updateRecord();
+
+                        //this is horrendous, I need to set up notifying/updating properly
+                        WeightTrainingRecordSparseArrayAdapter adapter = new WeightTrainingRecordSparseArrayAdapter(activity, getRecordArray());
+                        listView.setAdapter(adapter);
+
+                        viewModel.record = null;
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
+            }
+        });
     }
 
     @Override
@@ -98,5 +131,14 @@ public class RecordActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private SparseArray<WeightTrainingRecord> getRecordArray() {
+        List<WeightTrainingRecord> records = viewModel.getAllRecords();
+        SparseArray<WeightTrainingRecord> recordArray = new SparseArray<>();
+        for (int i = 0; i < records.size(); i++) {
+            recordArray.put(i, records.get(i));
+        }
+        return recordArray;
     }
 }

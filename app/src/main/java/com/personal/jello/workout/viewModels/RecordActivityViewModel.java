@@ -10,6 +10,8 @@ import com.personal.jello.workout.models.WeightTrainingType;
 
 import androidx.lifecycle.AndroidViewModel;
 
+import java.util.List;
+
 public class RecordActivityViewModel extends AndroidViewModel {
     private WorkoutRepository workoutRepository;
     public WeightTrainingRecord record;
@@ -23,8 +25,16 @@ public class RecordActivityViewModel extends AndroidViewModel {
         record.type = (WeightTrainingType)parent.getAdapter().getItem(pos);
     }
 
-    public void saveRecord(View view) {
+    public List<WeightTrainingRecord> getAllRecords() {
+        return workoutRepository.getAllRecords();
+    }
+
+    public void saveRecord() {
         workoutRepository.insertRecord(record);
+    }
+
+    public void updateRecord() {
+        workoutRepository.updateRecord(record);
     }
 
     public void getRecord() {

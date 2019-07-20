@@ -11,12 +11,10 @@ import java.util.concurrent.ExecutionException;
 
 public class WorkoutRepository {
     private WeightTrainingDao weightTrainingDao;
-    private List<WeightTrainingRecord> records;
 
     public WorkoutRepository(Application application) {
         WorkoutDatabase db = WorkoutDatabase.getWorkoutDatabase(application);
         weightTrainingDao = db.weightTrainingDao();
-        records = getAllRecords();
     }
 
 
