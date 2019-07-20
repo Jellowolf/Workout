@@ -12,50 +12,50 @@ import androidx.room.PrimaryKey;
 public class WeightTrainingRecord extends BaseObservable {
 
     @PrimaryKey(autoGenerate = true)
-    public int id;
+    public Integer id;
 
     @ColumnInfo(name = "type")
     public WeightTrainingType type;
 
     @ColumnInfo(name = "sets")
-    public int sets;
+    public Integer sets;
 
     @ColumnInfo(name = "reps")
-    public int reps;
+    public Integer reps;
 
     @ColumnInfo(name = "weight")
-    public double weight;
+    public Double weight;
 
     @ColumnInfo(name = "date")
     public Calendar date;
 
     @Bindable
     public String getWeight() {
-        return Double.toString(this.weight);
+        return this.weight != null ? Double.toString(this.weight) : null;
     }
 
     public void setWeight(String value) {
-        if (value != null && !value.isEmpty() && this.weight != Double.parseDouble(value))
+        if (value != null && !value.isEmpty() && (this.weight == null || this.weight != Double.parseDouble(value)))
             this.weight = Double.parseDouble(value);
     }
 
     @Bindable
     public String getSets() {
-        return Integer.toString(this.sets);
+        return this.sets != null ? Integer.toString(this.sets) : null;
     }
 
     public void setSets(String value) {
-        if (value != null && !value.isEmpty() && this.sets != Integer.parseInt(value))
+        if (value != null && !value.isEmpty() && (this.sets == null || this.sets != Integer.parseInt(value)))
             this.sets = Integer.parseInt(value);
     }
 
     @Bindable
     public String getReps() {
-        return Integer.toString(this.reps);
+        return this.reps != null ? Integer.toString(this.reps) : null;
     }
 
     public void setReps(String value) {
-        if (value != null && !value.isEmpty() && this.reps != Integer.parseInt(value))
+        if (value != null && !value.isEmpty() && (this.reps == null || this.reps != Integer.parseInt(value)))
             this.reps = Integer.parseInt(value);
     }
 

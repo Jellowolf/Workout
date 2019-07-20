@@ -38,7 +38,8 @@ public class WorkoutRepository {
 
         @Override
         protected List<WeightTrainingRecord> doInBackground(final Void... params) {
-            return weightTrainingAsyncTaskDao.getAll();
+            List<WeightTrainingRecord> records = weightTrainingAsyncTaskDao.getAll();
+            return records != null ? weightTrainingAsyncTaskDao.getAll() : null;
         }
     }
 
