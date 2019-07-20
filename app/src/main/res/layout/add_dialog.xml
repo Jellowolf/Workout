@@ -1,103 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
-        <variable
-            name="viewModel"
-            type="com.personal.jello.workout.viewModels.RecordActivityViewModel"/>
+        <variable name="viewModel" type="com.personal.jello.workout.viewModels.RecordActivityViewModel"/>
     </data>
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="300dp"
+        android:layout_height="wrap_content">
         <androidx.appcompat.widget.DialogTitle
             android:id="@+id/dialog_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add Workout Record"/>
+            android:layout_marginTop="5dp"
+            android:layout_centerHorizontal="true"
+            android:text="@string/dialog_title"/>
+
+        <TextView
+            android:id="@+id/dialog_types_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="15dp"
+            android:labelFor="@id/dialog_types"
+            android:layout_below="@id/dialog_title"
+            android:text="@string/dialog_types_title"/>
 
         <Spinner
             android:id="@+id/dialog_types"
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/dialog_title"
+            android:layout_below="@id/dialog_types_label"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:newValue="@{viewModel.record.type}"
             android:onItemSelected="@{(parent, view, pos, id)->viewModel.onTypeSelected(parent, view, pos, id)}"/>
 
         <TextView
             android:id="@+id/dialog_sets_label"
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
             android:labelFor="@id/dialog_sets"
             android:layout_below="@id/dialog_types"
-            android:text="Sets"/>
+            android:text="@string/dialog_sets_title"/>
 
         <EditText
             android:id="@+id/dialog_sets"
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:layout_below="@id/dialog_sets_label"
             android:text="@={viewModel.record.general.sets}"
             android:inputType="number"/>
 
         <TextView
             android:id="@+id/dialog_reps_label"
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
             android:labelFor="@id/dialog_reps"
             android:layout_below="@id/dialog_sets"
-            android:text="Reps"/>
+            android:text="@string/dialog_reps_title"/>
 
         <EditText
             android:id="@+id/dialog_reps"
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:layout_below="@id/dialog_reps_label"
             android:text="@={viewModel.record.general.reps}"
             android:inputType="number"/>
 
         <TextView
             android:id="@+id/dialog_weight_label"
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
             android:labelFor="@id/dialog_weight"
             android:layout_below="@id/dialog_reps"
-            android:text="Weight"/>
+            android:text="@string/dialog_weight_title"/>
 
         <EditText
             android:id="@+id/dialog_weight"
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:layout_below="@id/dialog_weight_label"
             android:text="@={viewModel.record.general.weight}"
             android:inputType="numberDecimal"/>
 
         <DatePicker
             android:id="@+id/dialog_date"
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_below="@id/dialog_weight"
             android:datePickerMode="spinner"
             android:calendarViewShown="false"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:day="@={viewModel.record.general.day}"
             android:month="@={viewModel.record.general.month}"
             android:year="@={viewModel.record.general.year}"/>
 
         <Button
             android:id="@+id/dialog_save_button"
-            android:layout_width="100dp"
+            android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:text="Save"
             android:layout_marginTop="5dp"
-            android:layout_marginRight="5dp"
+            android:layout_marginEnd="5dp"
             android:layout_below="@id/dialog_date"/>
 
         <Button
             android:id="@+id/dialog_delete_button"
-            android:layout_width="100dp"
+            android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:text="Delete"
             android:layout_marginTop="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_toRightOf="@id/dialog_save_button"
+            android:layout_marginEnd="5dp"
+            android:layout_alignParentEnd="true"
             android:layout_below="@id/dialog_date"/>
     </RelativeLayout>
 </layout>
