@@ -1,10 +1,11 @@
 <resources>
     <string name="app_name">Workout</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_scrolling">ScrollingActivity</string>
     <string name="dialog_title">Add Workout Record</string>
     <string name="dialog_types_title">Workout Type</string>
     <string name="dialog_sets_title">Sets</string>
     <string name="dialog_reps_title">Reps</string>
     <string name="dialog_weight_title">Weight</string>
+    <string name="dialog_save_text">Save</string>
+    <string name="dialog_delete_text">Delete</string>
 </resources>

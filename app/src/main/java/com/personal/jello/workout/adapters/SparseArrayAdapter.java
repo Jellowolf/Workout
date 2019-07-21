@@ -7,7 +7,7 @@ import android.widget.BaseAdapter;
 
 public class SparseArrayAdapter<T> extends BaseAdapter {
 
-    private SparseArray<T> data = new SparseArray<T>();
+    private SparseArray<T> data = new SparseArray<>();
     public void setData(SparseArray<T> data) {
         this.data = data;
     }
