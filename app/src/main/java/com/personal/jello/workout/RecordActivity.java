@@ -1,6 +1,7 @@
 package com.personal.jello.workout;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.personal.jello.workout.adapters.WeightTrainingDetailSparseArrayAdapter;
@@ -149,6 +150,8 @@ public class RecordActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent settingsIntent = new Intent(activity, SettingsActivity.class);
+            activity.startActivity(settingsIntent);
             return true;
         }
 
