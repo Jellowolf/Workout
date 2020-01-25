@@ -8,5 +8,5 @@ public class WeightTrainingRecordDetail {
     public WeightTrainingRecordGeneral general;
 
     @Embedded
-    public WeightTrainingType type;
+    public WorkoutType type;
 }

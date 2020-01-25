@@ -2,21 +2,18 @@ package com.personal.jello.workout.utility;
 
 import androidx.room.TypeConverter;
 
-import com.personal.jello.workout.models.WeightTrainingType;
-
 import java.util.Calendar;
-import java.util.Date;
 
 public class Converters {
 
     /*@TypeConverter
-    public static Integer WeightTrainingTypeToInteger(WeightTrainingType type) {
+    public static Integer WeightTrainingTypeToInteger(WorkoutType type) {
         return type.id;
     }
 
     @TypeConverter
-    public static WeightTrainingType IntegerToWeightTrainingType(int type) {
-        return WeightTrainingType.values()[type];
+    public static WorkoutType IntegerToWeightTrainingType(int type) {
+        return WorkoutType.values()[type];
     }*/
 
     @TypeConverter

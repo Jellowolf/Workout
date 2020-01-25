@@ -4,10 +4,10 @@ import android.app.Application;
 
 import androidx.lifecycle.AndroidViewModel;
 
-import com.personal.jello.workout.models.WeightTrainingType;
+import com.personal.jello.workout.models.WorkoutType;
 
 public class WeightTrainingTypeActivityViewModel extends AndroidViewModel {
-    public WeightTrainingType type;
+    public WorkoutType type;
 
     public WeightTrainingTypeActivityViewModel(Application application) {
         super(application);

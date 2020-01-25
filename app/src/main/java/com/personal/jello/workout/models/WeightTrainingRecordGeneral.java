@@ -11,7 +11,7 @@ import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "weightTrainingRecord", indices = {@Index(value = "type_id")},
-        foreignKeys = @ForeignKey(entity = WeightTrainingType.class, parentColumns = "typeId", childColumns = "type_id"))
+        foreignKeys = @ForeignKey(entity = WorkoutType.class, parentColumns = "typeId", childColumns = "type_id"))
 public class WeightTrainingRecordGeneral extends BaseObservable {
 
     @PrimaryKey(autoGenerate = true)

@@ -4,7 +4,7 @@ import android.app.Application;
 import android.os.AsyncTask;
 
 import com.personal.jello.workout.dataAccess.WeightTrainingTypeDao;
-import com.personal.jello.workout.models.WeightTrainingType;
+import com.personal.jello.workout.models.WorkoutType;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -17,7 +17,7 @@ public class WeightTrainingTypeRepository {
         weightTrainingTypeDao = db.weightTrainingTypeDao();
     }
 
-    public List<WeightTrainingType> getAllTypes() {
+    public List<WorkoutType> getAllTypes() {
         try {
             return new getAllAsyncTask(weightTrainingTypeDao).execute().get();
         } catch (ExecutionException e) {
@@ -28,7 +28,7 @@ public class WeightTrainingTypeRepository {
         return null;
     }
 
-    private static class getAllAsyncTask extends AsyncTask<Void, Void, List<WeightTrainingType>> {
+    private static class getAllAsyncTask extends AsyncTask<Void, Void, List<WorkoutType>> {
         private WeightTrainingTypeDao weightTrainingAsyncTaskDao;
 
         getAllAsyncTask(WeightTrainingTypeDao dao) {
@@ -36,17 +36,17 @@ public class WeightTrainingTypeRepository {
         }
 
         @Override
-        protected List<WeightTrainingType> doInBackground(final Void... params) {
-            List<WeightTrainingType> Types = weightTrainingAsyncTaskDao.getAll();
+        protected List<WorkoutType> doInBackground(final Void... params) {
+            List<WorkoutType> Types = weightTrainingAsyncTaskDao.getAll();
             return Types != null ? weightTrainingAsyncTaskDao.getAll() : null;
         }
     }
 
-    public void insertType(WeightTrainingType Type) {
+    public void insertType(WorkoutType Type) {
         new insertAsyncTask(weightTrainingTypeDao).execute(Type);
     }
 
-    private static class insertAsyncTask extends AsyncTask<WeightTrainingType, Void, Void> {
+    private static class insertAsyncTask extends AsyncTask<WorkoutType, Void, Void> {
         private WeightTrainingTypeDao weightTrainingAsyncTaskDao;
 
         insertAsyncTask(WeightTrainingTypeDao dao) {
@@ -54,17 +54,17 @@ public class WeightTrainingTypeRepository {
         }
 
         @Override
-        protected Void doInBackground(final WeightTrainingType... params) {
+        protected Void doInBackground(final WorkoutType... params) {
             weightTrainingAsyncTaskDao.insert(params[0]);
             return null;
         }
     }
 
-    public void updateType(WeightTrainingType Type) {
+    public void updateType(WorkoutType Type) {
         new updateAsyncTask(weightTrainingTypeDao).execute(Type);
     }
 
-    private static class updateAsyncTask extends AsyncTask<WeightTrainingType, Void, Void> {
+    private static class updateAsyncTask extends AsyncTask<WorkoutType, Void, Void> {
         private WeightTrainingTypeDao weightTrainingAsyncTaskDao;
 
         updateAsyncTask(WeightTrainingTypeDao dao) {
@@ -72,17 +72,17 @@ public class WeightTrainingTypeRepository {
         }
 
         @Override
-        protected Void doInBackground(final WeightTrainingType... params) {
+        protected Void doInBackground(final WorkoutType... params) {
             weightTrainingAsyncTaskDao.update(params[0]);
             return null;
         }
     }
 
-    public void deleteType(WeightTrainingType Type) {
+    public void deleteType(WorkoutType Type) {
         new deleteAsyncTask(weightTrainingTypeDao).execute(Type);
     }
 
-    private static class deleteAsyncTask extends AsyncTask<WeightTrainingType, Void, Void> {
+    private static class deleteAsyncTask extends AsyncTask<WorkoutType, Void, Void> {
         private WeightTrainingTypeDao weightTrainingAsyncTaskDao;
 
         deleteAsyncTask(WeightTrainingTypeDao dao) {
@@ -90,7 +90,7 @@ public class WeightTrainingTypeRepository {
         }
 
         @Override
-        protected Void doInBackground(final WeightTrainingType... params) {
+        protected Void doInBackground(final WorkoutType... params) {
             weightTrainingAsyncTaskDao.delete(params[0]);
             return null;
         }

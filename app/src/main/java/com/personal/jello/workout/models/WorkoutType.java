@@ -5,8 +5,8 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "weightTrainingType")
-public class WeightTrainingType extends BaseObservable {
+@Entity(tableName = "workoutType")
+public class WorkoutType extends BaseObservable {
 
     @PrimaryKey(autoGenerate = true)
     public Integer typeId;

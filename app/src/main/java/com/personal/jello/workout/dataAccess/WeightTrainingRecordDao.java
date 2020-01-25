@@ -16,7 +16,7 @@ public interface WeightTrainingRecordDao {
     @Query("SELECT * FROM WeightTrainingRecord")
     List<WeightTrainingRecordGeneral> getAll();
 
-    @Query("SELECT * FROM WeightTrainingRecord JOIN WeightTrainingType on WeightTrainingRecord.type_id = WeightTrainingType.typeId")
+    @Query("SELECT * FROM WeightTrainingRecord JOIN WorkoutType on WeightTrainingRecord.type_id = WorkoutType.typeId")
     List<WeightTrainingRecordDetail> getAllDetails();
 
     @Insert

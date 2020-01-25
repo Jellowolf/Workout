@@ -7,7 +7,7 @@ import android.widget.AdapterView;
 import androidx.lifecycle.AndroidViewModel;
 
 import com.personal.jello.workout.models.WeightTrainingRecordDetail;
-import com.personal.jello.workout.models.WeightTrainingType;
+import com.personal.jello.workout.models.WorkoutType;
 
 public class RecordActivityViewModel extends AndroidViewModel {
     public WeightTrainingRecordDetail record;
@@ -17,7 +17,7 @@ public class RecordActivityViewModel extends AndroidViewModel {
     }
 
     public void onTypeSelected(AdapterView<?> parent, View view, int pos, long id){
-        record.type = (WeightTrainingType)parent.getAdapter().getItem(pos);
+        record.type = (WorkoutType)parent.getAdapter().getItem(pos);
         record.general.typeId = record.type.typeId;
     }
 }

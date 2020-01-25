@@ -8,7 +8,7 @@ import com.personal.jello.workout.adapters.WeightTrainingDetailSparseArrayAdapte
 import com.personal.jello.workout.databinding.AddDialogBinding;
 import com.personal.jello.workout.models.WeightTrainingRecordDetail;
 import com.personal.jello.workout.models.WeightTrainingRecordGeneral;
-import com.personal.jello.workout.models.WeightTrainingType;
+import com.personal.jello.workout.models.WorkoutType;
 import com.personal.jello.workout.services.WeightTrainingRecordService;
 import com.personal.jello.workout.services.WeightTrainingTypeService;
 import com.personal.jello.workout.viewModels.RecordActivityViewModel;
@@ -56,7 +56,7 @@ public class RecordActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 final Dialog dialog = new Dialog(activity);
-                AddDialogBinding binding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.add_dialog, null, false);
+                AddDialogBinding binding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.add_record_dialog, null, false);
                 dialog.setContentView(binding.getRoot());
 
                 viewModel.record = new WeightTrainingRecordDetail();
@@ -66,12 +66,12 @@ public class RecordActivity extends AppCompatActivity {
                 binding.setLifecycleOwner(activity);
 
                 // uncomment to add a new type until I make a new type saving workflow
-                //WeightTrainingType type = new WeightTrainingType();
+                //WorkoutType type = new WorkoutType();
                 //type.description = "Bluh";
                 //typeService.saveType(type);
 
                 Spinner spinner = dialog.findViewById(R.id.dialog_types);
-                ArrayAdapter<WeightTrainingType> adapter = new ArrayAdapter<>(activity, android.R.layout.simple_list_item_1, android.R.id.text1, typeService.getAllTypes());
+                ArrayAdapter<WorkoutType> adapter = new ArrayAdapter<>(activity, android.R.layout.simple_list_item_1, android.R.id.text1, typeService.getAllTypes());
                 spinner.setAdapter(adapter);
 
                 Button saveButton = dialog.findViewById(R.id.dialog_save_button);
@@ -97,12 +97,12 @@ public class RecordActivity extends AppCompatActivity {
 
                 // Temporarily recycling the dialog code from above
                 final Dialog dialog = new Dialog(activity);
-                AddDialogBinding binding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.add_dialog, null, false);
+                AddDialogBinding binding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.add_record_dialog, null, false);
                 dialog.setContentView(binding.getRoot());
 
                 // Set the data source before the viewmodel, or the newValue binding will not work
                 Spinner spinner = dialog.findViewById(R.id.dialog_types);
-                ArrayAdapter<WeightTrainingType> adapter = new ArrayAdapter<>(activity, android.R.layout.simple_list_item_1, android.R.id.text1, typeService.getAllTypes());
+                ArrayAdapter<WorkoutType> adapter = new ArrayAdapter<>(activity, android.R.layout.simple_list_item_1, android.R.id.text1, typeService.getAllTypes());
                 spinner.setAdapter(adapter);
 
                 binding.setViewModel(viewModel);
