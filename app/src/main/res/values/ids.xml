@@ -2,6 +2,7 @@
 <resources>
     <!-- Generic -->
     <item type="id" name="dialog_save_button"/>
+    <item type="id" name="dialog_edit_button"/>
     <item type="id" name="dialog_delete_button"/>
     <item type="id" name="dialog_cancel_button"/>
     <item type="id" name="menu_edit"/>

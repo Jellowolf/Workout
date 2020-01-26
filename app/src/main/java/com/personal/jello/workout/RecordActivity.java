@@ -6,6 +6,7 @@ import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.personal.jello.workout.adapters.WeightTrainingDetailSparseArrayAdapter;
 import com.personal.jello.workout.databinding.AddRecordDialogBinding;
+import com.personal.jello.workout.databinding.AddWorkoutTypeDialogBinding;
 import com.personal.jello.workout.models.WeightTrainingRecordDetail;
 import com.personal.jello.workout.models.WeightTrainingRecordGeneral;
 import com.personal.jello.workout.models.WorkoutType;
@@ -13,6 +14,7 @@ import com.personal.jello.workout.services.WeightTrainingRecordService;
 import com.personal.jello.workout.services.WorkoutTypeService;
 import com.personal.jello.workout.viewModels.RecordActivityViewModel;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
@@ -20,7 +22,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.util.SparseArray;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -55,86 +59,47 @@ public class RecordActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final Dialog dialog = new Dialog(activity);
-                AddRecordDialogBinding binding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.add_record_dialog, null, false);
-                dialog.setContentView(binding.getRoot());
-
-                viewModel.record = new WeightTrainingRecordDetail();
-                viewModel.record.general = new WeightTrainingRecordGeneral();
-                viewModel.record.general.date = Calendar.getInstance();
-                binding.setViewModel(viewModel);
-                binding.setLifecycleOwner(activity);
-
-                Spinner spinner = dialog.findViewById(R.id.dialog_types);
-                ArrayAdapter<WorkoutType> adapter = new ArrayAdapter<>(activity, android.R.layout.simple_list_item_1, android.R.id.text1, typeService.getAllTypes());
-                spinner.setAdapter(adapter);
-
-                Button saveButton = dialog.findViewById(R.id.dialog_save_button);
-                saveButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        recordService.saveRecord(viewModel.record.general);
-                        resetList();
-                        viewModel.record = null;
-                        dialog.dismiss();
-                    }
-                });
-
-                Button cancelButton = dialog.findViewById(R.id.dialog_cancel_button);
-                cancelButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
-                dialog.show();
+                createRecordDialog(null, true);
             }
         });
         listView = findViewById(R.id.list);
         WeightTrainingDetailSparseArrayAdapter adapter = new WeightTrainingDetailSparseArrayAdapter(this, getRecordArray());
         listView.setAdapter(adapter);
+        registerForContextMenu(listView);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 viewModel.record = (WeightTrainingRecordDetail)parent.getAdapter().getItem(position);
-
-                // Temporarily recycling the dialog code from above
-                final Dialog dialog = new Dialog(activity);
-                AddRecordDialogBinding binding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.add_record_dialog, null, false);
-                dialog.setContentView(binding.getRoot());
-
-                // Set the data source before the viewmodel, or the newValue binding will not work
-                Spinner spinner = dialog.findViewById(R.id.dialog_types);
-                ArrayAdapter<WorkoutType> adapter = new ArrayAdapter<>(activity, android.R.layout.simple_list_item_1, android.R.id.text1, typeService.getAllTypes());
-                spinner.setAdapter(adapter);
-
-                binding.setViewModel(viewModel);
-                binding.setLifecycleOwner(activity);
-
-                Button saveButton = dialog.findViewById(R.id.dialog_save_button);
-                saveButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        recordService.updateRecord(viewModel.record.general);
-                        resetList();
-                        viewModel.record = null;
-                        dialog.dismiss();
-                    }
-                });
-
-                Button deleteButton = dialog.findViewById(R.id.dialog_delete_button);
-                deleteButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        recordService.deleteRecord(viewModel.record.general);
-                        resetList();
-                        viewModel.record = null;
-                        dialog.dismiss();
-                    }
-                });
-                dialog.show();
+                createRecordDialog(viewModel.record, false);
             }
         });
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, view, menuInfo);
+        if (view.getId() == R.id.list) {
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.menu_type_list, menu);
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        WeightTrainingRecordDetail recordDetail = (WeightTrainingRecordDetail) this.listView.getItemAtPosition(info.position);
+        switch (item.getItemId()) {
+            case R.id.menu_edit:
+                createRecordDialog(recordDetail, true);
+                resetList();
+                return true;
+            case R.id.menu_delete:
+                recordService.deleteRecord(recordDetail.general);
+                resetList();
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
     }
 
     @Override
@@ -182,5 +147,70 @@ public class RecordActivity extends AppCompatActivity {
         //this is horrendous, I need to set up notifying/updating properly
         WeightTrainingDetailSparseArrayAdapter adapter = new WeightTrainingDetailSparseArrayAdapter(activity, getRecordArray());
         listView.setAdapter(adapter);
+    }
+
+    private void createRecordDialog(@Nullable WeightTrainingRecordDetail recordDetail, boolean controlsEnabled) {
+        if (recordDetail != null) {
+            viewModel.record = recordDetail;
+        }
+        else {
+            viewModel.record = new WeightTrainingRecordDetail();
+            viewModel.record.general = new WeightTrainingRecordGeneral();
+            viewModel.record.general.date = Calendar.getInstance();
+        }
+
+        final Dialog dialog = new Dialog(activity);
+        AddRecordDialogBinding binding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.add_record_dialog, null, false);
+        dialog.setContentView(binding.getRoot());
+
+        // Set the data source before the viewmodel, or the newValue binding will not work (not sure what the relevance is on this anymore)
+        Spinner spinner = dialog.findViewById(R.id.dialog_types);
+        ArrayAdapter<WorkoutType> adapter = new ArrayAdapter<>(activity, android.R.layout.simple_list_item_1, android.R.id.text1, typeService.getAllTypes());
+        spinner.setAdapter(adapter);
+
+        binding.setViewModel(viewModel);
+        binding.setLifecycleOwner(activity);
+
+        Button saveButton = dialog.findViewById(R.id.dialog_save_button);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (viewModel.record.general.recordId == null)
+                    recordService.saveRecord(viewModel.record.general);
+                else
+                    recordService.updateRecord(viewModel.record.general);
+                resetList();
+                viewModel.record = null;
+                dialog.dismiss();
+            }
+        });
+
+        Button editButton = dialog.findViewById(R.id.dialog_edit_button);
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setControlsEnabled(dialog, true);
+            }
+        });
+
+        Button cancelButton = dialog.findViewById(R.id.dialog_cancel_button);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        setControlsEnabled(dialog, controlsEnabled);
+        dialog.show();
+    }
+
+    private void setControlsEnabled(final Dialog dialog, boolean isEnabled) {
+        dialog.findViewById(R.id.dialog_types).setEnabled(isEnabled);
+        dialog.findViewById(R.id.dialog_sets).setEnabled(isEnabled);
+        dialog.findViewById(R.id.dialog_reps).setEnabled(isEnabled);
+        dialog.findViewById(R.id.dialog_weight).setEnabled(isEnabled);
+        dialog.findViewById(R.id.dialog_date).setEnabled(isEnabled);
+        dialog.findViewById(R.id.dialog_save_button).setVisibility(isEnabled ? View.VISIBLE : View.INVISIBLE);
+        dialog.findViewById(R.id.dialog_edit_button).setVisibility(isEnabled ? View.INVISIBLE : View.VISIBLE);
     }
 }

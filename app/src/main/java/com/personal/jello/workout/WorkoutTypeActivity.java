@@ -102,11 +102,12 @@ public class WorkoutTypeActivity extends AppCompatActivity {
     }
 
     private void createTypeDialog(@Nullable WorkoutType type) {
+        viewModel.type = type != null ? type : new WorkoutType();
+
         final Dialog dialog = new Dialog(activity);
         AddWorkoutTypeDialogBinding binding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.add_workout_type_dialog, null, false);
         dialog.setContentView(binding.getRoot());
 
-        viewModel.type = type != null ? type : new WorkoutType();
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(activity);
 
