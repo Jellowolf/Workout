@@ -17,8 +17,12 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.util.SparseArray;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -78,6 +82,30 @@ public class WorkoutTypeActivity extends AppCompatActivity {
         listView = findViewById(R.id.list);
         WorkoutTypeSparseArrayAdapter adapter = new WorkoutTypeSparseArrayAdapter(this, getRecordArray());
         listView.setAdapter(adapter);
+        registerForContextMenu(listView);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, view, menuInfo);
+        if (view.getId() == R.id.list) {
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.menu_type_list, menu);
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        WorkoutType type = (WorkoutType) this.listView.getItemAtPosition(info.position);
+        switch (item.getItemId()) {
+            case R.id.menu_delete:
+                typeService.deleteType(type);
+                resetList();
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
     }
 
     private SparseArray<WorkoutType> getRecordArray() {

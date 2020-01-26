@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Generic Dialog -->
+    <!-- Generic -->
     <item type="id" name="dialog_save_button"/>
     <item type="id" name="dialog_delete_button"/>
     <item type="id" name="dialog_cancel_button"/>
+    <item type="id" name="menu_delete"/>
 
     <!-- Add Record Dialog -->
     <item type="id" name="add_record_dialog_title"/>

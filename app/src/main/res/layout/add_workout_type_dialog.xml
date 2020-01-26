@@ -39,7 +39,7 @@
             android:id="@+id/dialog_save_button"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
-            android:text="@string/dialog_save_text"
+            android:text="@string/save_text"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="5dp"
             android:layout_below="@id/dialog_type_description"/>
@@ -48,7 +48,7 @@
             android:id="@+id/dialog_cancel_button"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
-            android:text="@string/dialog_cancel_text"
+            android:text="@string/cancel_text"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="5dp"
             android:layout_alignParentEnd="true"
