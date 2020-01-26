@@ -65,11 +65,6 @@ public class RecordActivity extends AppCompatActivity {
                 binding.setViewModel(viewModel);
                 binding.setLifecycleOwner(activity);
 
-                // uncomment to add a new type until I make a new type saving workflow
-                //WorkoutType type = new WorkoutType();
-                //type.description = "Bluh";
-                //typeService.saveType(type);
-
                 Spinner spinner = dialog.findViewById(R.id.dialog_types);
                 ArrayAdapter<WorkoutType> adapter = new ArrayAdapter<>(activity, android.R.layout.simple_list_item_1, android.R.id.text1, typeService.getAllTypes());
                 spinner.setAdapter(adapter);
@@ -81,6 +76,14 @@ public class RecordActivity extends AppCompatActivity {
                         recordService.saveRecord(viewModel.record.general);
                         resetList();
                         viewModel.record = null;
+                        dialog.dismiss();
+                    }
+                });
+
+                Button cancelButton = dialog.findViewById(R.id.dialog_cancel_button);
+                cancelButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
                         dialog.dismiss();
                     }
                 });

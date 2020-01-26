@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
+        <import type="android.view.View" />
         <variable name="viewModel" type="com.personal.jello.workout.viewModels.RecordActivityViewModel"/>
     </data>
     <RelativeLayout
@@ -119,9 +120,21 @@
 
         <Button
             android:id="@+id/dialog_delete_button"
+            android:visibility="@{viewModel.record.general.recordId == null ? View.INVISIBLE : View.VISIBLE}"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:text="@string/dialog_delete_text"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@id/dialog_date"/>
+
+        <Button
+            android:id="@+id/dialog_cancel_button"
+            android:visibility="@{viewModel.record.general.recordId == null ? View.VISIBLE : View.INVISIBLE}"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:text="@string/dialog_cancel_text"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="5dp"
             android:layout_alignParentEnd="true"
