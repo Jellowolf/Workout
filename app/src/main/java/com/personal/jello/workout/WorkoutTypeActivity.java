@@ -11,6 +11,7 @@ import com.personal.jello.workout.services.WorkoutTypeService;
 import com.personal.jello.workout.viewModels.WorkoutTypeActivityViewModel;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
@@ -42,6 +43,12 @@ public class WorkoutTypeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_workout_type);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
+        }
+
         viewModel = ViewModelProviders.of(this, new ViewModelProvider.AndroidViewModelFactory(this.getApplication())).get(WorkoutTypeActivityViewModel.class);
         typeService = new WorkoutTypeService(this.getApplication());
 
@@ -84,6 +91,12 @@ public class WorkoutTypeActivity extends AppCompatActivity {
             default:
                 return super.onContextItemSelected(item);
         }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
     private SparseArray<WorkoutType> getRecordArray() {

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.personal.jello.workout.adapters.WeightTrainingDetailSparseArrayAdapter;
 import com.personal.jello.workout.databinding.AddRecordDialogBinding;
-import com.personal.jello.workout.databinding.AddWorkoutTypeDialogBinding;
 import com.personal.jello.workout.models.WeightTrainingRecordDetail;
 import com.personal.jello.workout.models.WeightTrainingRecordGeneral;
 import com.personal.jello.workout.models.WorkoutType;
@@ -51,6 +50,7 @@ public class RecordActivity extends AppCompatActivity {
         setContentView(R.layout.activity_record);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         viewModel = ViewModelProviders.of(this, new ViewModelProvider.AndroidViewModelFactory(this.getApplication())).get(RecordActivityViewModel.class);
         recordService = new WeightTrainingRecordService(this.getApplication());
         typeService = new WorkoutTypeService(this.getApplication());
