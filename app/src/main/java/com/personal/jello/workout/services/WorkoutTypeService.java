@@ -33,4 +33,8 @@ public class WorkoutTypeService {
     public void deleteType(WorkoutType type) {
         workoutTypeRepository.deleteType(type);
     }
+
+    public boolean checkIfDeleteValid(Integer typeId) {
+        return workoutTypeRepository.checkIfDeleteValid(typeId);
+    }
 }

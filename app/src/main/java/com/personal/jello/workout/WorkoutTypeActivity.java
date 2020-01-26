@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.personal.jello.workout.adapters.WorkoutTypeSparseArrayAdapter;
 import com.personal.jello.workout.databinding.AddWorkoutTypeDialogBinding;
 import com.personal.jello.workout.models.WorkoutType;
@@ -85,7 +86,10 @@ public class WorkoutTypeActivity extends AppCompatActivity {
                 resetList();
                 return true;
             case R.id.menu_delete:
-                typeService.deleteType(type);
+                if (typeService.checkIfDeleteValid(type.typeId))
+                    typeService.deleteType(type);
+                else
+                    Snackbar.make(listView, "Cannot delete a type that is in use.", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 resetList();
                 return true;
             default:
@@ -115,11 +119,11 @@ public class WorkoutTypeActivity extends AppCompatActivity {
     }
 
     private void createTypeDialog(@Nullable WorkoutType type) {
-        viewModel.type = type != null ? type : new WorkoutType();
-
         final Dialog dialog = new Dialog(activity);
         AddWorkoutTypeDialogBinding binding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.add_workout_type_dialog, null, false);
         dialog.setContentView(binding.getRoot());
+
+        viewModel.type = type != null ? type : new WorkoutType();
 
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(activity);

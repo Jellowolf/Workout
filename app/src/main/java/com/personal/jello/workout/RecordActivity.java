@@ -150,15 +150,6 @@ public class RecordActivity extends AppCompatActivity {
     }
 
     private void createRecordDialog(@Nullable WeightTrainingRecordDetail recordDetail, boolean controlsEnabled) {
-        if (recordDetail != null) {
-            viewModel.record = recordDetail;
-        }
-        else {
-            viewModel.record = new WeightTrainingRecordDetail();
-            viewModel.record.general = new WeightTrainingRecordGeneral();
-            viewModel.record.general.date = Calendar.getInstance();
-        }
-
         final Dialog dialog = new Dialog(activity);
         AddRecordDialogBinding binding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.add_record_dialog, null, false);
         dialog.setContentView(binding.getRoot());
@@ -167,6 +158,15 @@ public class RecordActivity extends AppCompatActivity {
         Spinner spinner = dialog.findViewById(R.id.dialog_types);
         ArrayAdapter<WorkoutType> adapter = new ArrayAdapter<>(activity, android.R.layout.simple_list_item_1, android.R.id.text1, typeService.getAllTypes());
         spinner.setAdapter(adapter);
+
+        if (recordDetail != null) {
+            viewModel.record = recordDetail;
+        }
+        else {
+            viewModel.record = new WeightTrainingRecordDetail();
+            viewModel.record.general = new WeightTrainingRecordGeneral();
+            viewModel.record.general.date = Calendar.getInstance();
+        }
 
         binding.setViewModel(viewModel);
         binding.setLifecycleOwner(activity);

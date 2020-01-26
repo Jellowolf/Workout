@@ -42,8 +42,8 @@ public class WorkoutTypeRepository {
         }
     }
 
-    public void insertType(WorkoutType Type) {
-        new insertAsyncTask(weightTrainingTypeDao).execute(Type);
+    public void insertType(WorkoutType type) {
+        new insertAsyncTask(weightTrainingTypeDao).execute(type);
     }
 
     private static class insertAsyncTask extends AsyncTask<WorkoutType, Void, Void> {
@@ -60,8 +60,8 @@ public class WorkoutTypeRepository {
         }
     }
 
-    public void updateType(WorkoutType Type) {
-        new updateAsyncTask(weightTrainingTypeDao).execute(Type);
+    public void updateType(WorkoutType type) {
+        new updateAsyncTask(weightTrainingTypeDao).execute(type);
     }
 
     private static class updateAsyncTask extends AsyncTask<WorkoutType, Void, Void> {
@@ -78,8 +78,8 @@ public class WorkoutTypeRepository {
         }
     }
 
-    public void deleteType(WorkoutType Type) {
-        new deleteAsyncTask(weightTrainingTypeDao).execute(Type);
+    public void deleteType(WorkoutType type) {
+        new deleteAsyncTask(weightTrainingTypeDao).execute(type);
     }
 
     private static class deleteAsyncTask extends AsyncTask<WorkoutType, Void, Void> {
@@ -93,6 +93,30 @@ public class WorkoutTypeRepository {
         protected Void doInBackground(final WorkoutType... params) {
             weightTrainingAsyncTaskDao.delete(params[0]);
             return null;
+        }
+    }
+
+    public boolean checkIfDeleteValid(Integer typeId) {
+        try {
+            return new checkIfDeleteValidAsyncTask(weightTrainingTypeDao).execute(typeId).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private static class checkIfDeleteValidAsyncTask extends AsyncTask<Integer, Void, Boolean> {
+        private WeightTrainingTypeDao weightTrainingAsyncTaskDao;
+
+        checkIfDeleteValidAsyncTask(WeightTrainingTypeDao dao) {
+            weightTrainingAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Boolean doInBackground(final Integer... params) {
+           return weightTrainingAsyncTaskDao.checkIfDeleteValid(params[0]);
         }
     }
 }
