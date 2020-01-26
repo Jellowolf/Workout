@@ -5,12 +5,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.personal.jello.workout.adapters.WeightTrainingDetailSparseArrayAdapter;
-import com.personal.jello.workout.databinding.AddDialogBinding;
+import com.personal.jello.workout.databinding.AddRecordDialogBinding;
 import com.personal.jello.workout.models.WeightTrainingRecordDetail;
 import com.personal.jello.workout.models.WeightTrainingRecordGeneral;
 import com.personal.jello.workout.models.WorkoutType;
 import com.personal.jello.workout.services.WeightTrainingRecordService;
-import com.personal.jello.workout.services.WeightTrainingTypeService;
+import com.personal.jello.workout.services.WorkoutTypeService;
 import com.personal.jello.workout.viewModels.RecordActivityViewModel;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -39,7 +39,7 @@ public class RecordActivity extends AppCompatActivity {
     private ListView listView;
     private static RecordActivityViewModel viewModel;
     private static WeightTrainingRecordService recordService;
-    private static WeightTrainingTypeService typeService;
+    private static WorkoutTypeService typeService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,14 +49,14 @@ public class RecordActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         viewModel = ViewModelProviders.of(this, new ViewModelProvider.AndroidViewModelFactory(this.getApplication())).get(RecordActivityViewModel.class);
         recordService = new WeightTrainingRecordService(this.getApplication());
-        typeService = new WeightTrainingTypeService(this.getApplication());
+        typeService = new WorkoutTypeService(this.getApplication());
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final Dialog dialog = new Dialog(activity);
-                AddDialogBinding binding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.add_record_dialog, null, false);
+                AddRecordDialogBinding binding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.add_record_dialog, null, false);
                 dialog.setContentView(binding.getRoot());
 
                 viewModel.record = new WeightTrainingRecordDetail();
@@ -97,7 +97,7 @@ public class RecordActivity extends AppCompatActivity {
 
                 // Temporarily recycling the dialog code from above
                 final Dialog dialog = new Dialog(activity);
-                AddDialogBinding binding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.add_record_dialog, null, false);
+                AddRecordDialogBinding binding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.add_record_dialog, null, false);
                 dialog.setContentView(binding.getRoot());
 
                 // Set the data source before the viewmodel, or the newValue binding will not work

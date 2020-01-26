@@ -9,10 +9,10 @@ import com.personal.jello.workout.models.WorkoutType;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class WeightTrainingTypeRepository {
+public class WorkoutTypeRepository {
     private WeightTrainingTypeDao weightTrainingTypeDao;
 
-    public WeightTrainingTypeRepository(Application application) {
+    public WorkoutTypeRepository(Application application) {
         WorkoutDatabase db = WorkoutDatabase.getWorkoutDatabase(application);
         weightTrainingTypeDao = db.weightTrainingTypeDao();
     }

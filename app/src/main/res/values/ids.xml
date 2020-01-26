@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item type="id" name="dialog_title"/>
+    <!-- Generic Dialog -->
+    <item type="id" name="dialog_save_button"/>
+    <item type="id" name="dialog_delete_button"/>
+    <item type="id" name="dialog_cancel_button"/>
+
+    <!-- Add Record Dialog -->
+    <item type="id" name="add_record_dialog_title"/>
     <item type="id" name="dialog_types"/>
     <item type="id" name="dialog_types_label"/>
     <item type="id" name="dialog_sets"/>
@@ -11,6 +17,9 @@
     <item type="id" name="dialog_weight_label"/>
     <item type="id" name="dialog_date"/>
     <item type="id" name="dialog_date_label"/>
-    <item type="id" name="dialog_save_button"/>
-    <item type="id" name="dialog_delete_button"/>
+
+    <!-- Add Type Dialog -->
+    <item type="id" name="add_type_dialog_title"/>
+    <item type="id" name="dialog_type_description_label"/>
+    <item type="id" name="dialog_type_description"/>
 </resources>

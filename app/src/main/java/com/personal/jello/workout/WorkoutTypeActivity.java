@@ -1,21 +1,25 @@
 package com.personal.jello.workout;
 
+import android.app.Dialog;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import com.personal.jello.workout.adapters.WeightTrainingDetailSparseArrayAdapter;
 import com.personal.jello.workout.adapters.WorkoutTypeSparseArrayAdapter;
-import com.personal.jello.workout.models.WeightTrainingRecordDetail;
-import com.personal.jello.workout.models.WeightTrainingRecordGeneral;
+import com.personal.jello.workout.databinding.AddWorkoutTypeDialogBinding;
 import com.personal.jello.workout.models.WorkoutType;
-import com.personal.jello.workout.services.WeightTrainingTypeService;
+import com.personal.jello.workout.services.WorkoutTypeService;
+import com.personal.jello.workout.viewModels.WorkoutTypeActivityViewModel;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.util.SparseArray;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.List;
@@ -24,7 +28,8 @@ public class WorkoutTypeActivity extends AppCompatActivity {
 
     final WorkoutTypeActivity activity = this;
     private ListView listView;
-    private static WeightTrainingTypeService typeService;
+    private static WorkoutTypeActivityViewModel viewModel;
+    private static WorkoutTypeService typeService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,14 +37,41 @@ public class WorkoutTypeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_workout_type);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        typeService = new WeightTrainingTypeService(this.getApplication());
+        viewModel = ViewModelProviders.of(this, new ViewModelProvider.AndroidViewModelFactory(this.getApplication())).get(WorkoutTypeActivityViewModel.class);
+        typeService = new WorkoutTypeService(this.getApplication());
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                final Dialog dialog = new Dialog(activity);
+                AddWorkoutTypeDialogBinding binding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.add_workout_type_dialog, null, false);
+                dialog.setContentView(binding.getRoot());
+
+                viewModel.type = new WorkoutType();
+                binding.setViewModel(viewModel);
+                binding.setLifecycleOwner(activity);
+
+                Button saveButton = dialog.findViewById(R.id.dialog_save_button);
+                saveButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        typeService.saveType(viewModel.type);
+                        resetList();
+                        viewModel.type = null;
+                        dialog.dismiss();
+                    }
+                });
+
+                Button cancelButton = dialog.findViewById(R.id.dialog_cancel_button);
+                cancelButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        viewModel.type = null;
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
             }
         });
 
@@ -55,5 +87,11 @@ public class WorkoutTypeActivity extends AppCompatActivity {
             typeArray.put(i, types.get(i));
         }
         return typeArray;
+    }
+
+    private void resetList() {
+        //this is horrendous, I need to set up notifying/updating properly
+        WorkoutTypeSparseArrayAdapter adapter = new WorkoutTypeSparseArrayAdapter(activity, getRecordArray());
+        listView.setAdapter(adapter);
     }
 }
