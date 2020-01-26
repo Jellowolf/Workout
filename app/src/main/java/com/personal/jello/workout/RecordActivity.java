@@ -161,6 +161,13 @@ public class RecordActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    // there's probably a more elegant way, but this is accounting for an edited type
+    @Override
+    public void onResume() {
+        super.onResume();
+        resetList();
+    }
+
     private SparseArray<WeightTrainingRecordDetail> getRecordArray() {
         List<WeightTrainingRecordDetail> records = recordService.getAllDetails();
         List<WeightTrainingRecordGeneral> general = recordService.getAllRecords();

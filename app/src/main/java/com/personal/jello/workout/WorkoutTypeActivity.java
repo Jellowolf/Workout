@@ -10,6 +10,7 @@ import com.personal.jello.workout.models.WorkoutType;
 import com.personal.jello.workout.services.WorkoutTypeService;
 import com.personal.jello.workout.viewModels.WorkoutTypeActivityViewModel;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
@@ -48,34 +49,7 @@ public class WorkoutTypeActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final Dialog dialog = new Dialog(activity);
-                AddWorkoutTypeDialogBinding binding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.add_workout_type_dialog, null, false);
-                dialog.setContentView(binding.getRoot());
-
-                viewModel.type = new WorkoutType();
-                binding.setViewModel(viewModel);
-                binding.setLifecycleOwner(activity);
-
-                Button saveButton = dialog.findViewById(R.id.dialog_save_button);
-                saveButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        typeService.saveType(viewModel.type);
-                        resetList();
-                        viewModel.type = null;
-                        dialog.dismiss();
-                    }
-                });
-
-                Button cancelButton = dialog.findViewById(R.id.dialog_cancel_button);
-                cancelButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        viewModel.type = null;
-                        dialog.dismiss();
-                    }
-                });
-                dialog.show();
+                createTypeDialog(null);
             }
         });
 
@@ -99,6 +73,10 @@ public class WorkoutTypeActivity extends AppCompatActivity {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         WorkoutType type = (WorkoutType) this.listView.getItemAtPosition(info.position);
         switch (item.getItemId()) {
+            case R.id.menu_edit:
+                createTypeDialog(type);
+                resetList();
+                return true;
             case R.id.menu_delete:
                 typeService.deleteType(type);
                 resetList();
@@ -121,5 +99,39 @@ public class WorkoutTypeActivity extends AppCompatActivity {
         //this is horrendous, I need to set up notifying/updating properly
         WorkoutTypeSparseArrayAdapter adapter = new WorkoutTypeSparseArrayAdapter(activity, getRecordArray());
         listView.setAdapter(adapter);
+    }
+
+    private void createTypeDialog(@Nullable WorkoutType type) {
+        final Dialog dialog = new Dialog(activity);
+        AddWorkoutTypeDialogBinding binding = DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.add_workout_type_dialog, null, false);
+        dialog.setContentView(binding.getRoot());
+
+        viewModel.type = type != null ? type : new WorkoutType();
+        binding.setViewModel(viewModel);
+        binding.setLifecycleOwner(activity);
+
+        Button saveButton = dialog.findViewById(R.id.dialog_save_button);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (viewModel.type.typeId == null)
+                    typeService.saveType(viewModel.type);
+                else
+                    typeService.updateType(viewModel.type);
+                resetList();
+                viewModel.type = null;
+                dialog.dismiss();
+            }
+        });
+
+        Button cancelButton = dialog.findViewById(R.id.dialog_cancel_button);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewModel.type = null;
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 }

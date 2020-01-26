@@ -5,6 +5,7 @@
 
     <!-- Generic Menu -->
     <string name="add_text">Add</string>
+    <string name="edit_text">Edit</string>
     <string name="save_text">Save</string>
     <string name="delete_text">Delete</string>
     <string name="cancel_text">Cancel</string>
