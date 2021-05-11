@@ -15,7 +15,7 @@ public class BindingAdapters {
         SpinnerAdapter adapter = spinner.getAdapter();
         if (adapter == null) return;
         for (int i = 0; i < adapter.getCount(); i++) {
-            if (((WorkoutType)adapter.getItem(i)).typeId == type.typeId)
+            if (type != null && ((WorkoutType)adapter.getItem(i)).typeId.equals(type.typeId))
                 spinner.setSelection(i, true);
         }
     }
