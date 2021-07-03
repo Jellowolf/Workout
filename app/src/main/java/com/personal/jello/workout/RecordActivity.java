@@ -1,16 +1,24 @@
 package com.personal.jello.workout;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.personal.jello.workout.adapters.WeightTrainingDetailSparseArrayAdapter;
+import com.personal.jello.workout.controllers.WeightTrainingController;
+import com.personal.jello.workout.controllers.WorkoutTypeController;
 import com.personal.jello.workout.databinding.AddRecordDialogBinding;
 import com.personal.jello.workout.models.WeightTrainingRecordDetail;
 import com.personal.jello.workout.models.WeightTrainingRecordGeneral;
 import com.personal.jello.workout.models.WorkoutType;
 import com.personal.jello.workout.services.WeightTrainingRecordService;
 import com.personal.jello.workout.services.WorkoutTypeService;
+import com.personal.jello.workout.utility.Filters;
+import com.personal.jello.workout.utility.Path;
+import com.personal.jello.workout.utility.PortUtility;
 import com.personal.jello.workout.viewModels.RecordActivityViewModel;
 
 import androidx.annotation.Nullable;
@@ -30,11 +38,22 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.List;
+
+import io.javalin.Javalin;
+import io.javalin.core.util.RouteOverviewPlugin;
+import io.javalin.plugin.json.JavalinJson;
+
+import static io.javalin.apibuilder.ApiBuilder.after;
+import static io.javalin.apibuilder.ApiBuilder.before;
+import static io.javalin.apibuilder.ApiBuilder.get;
+import static io.javalin.apibuilder.ApiBuilder.post;
 
 public class RecordActivity extends AppCompatActivity {
 
@@ -43,6 +62,7 @@ public class RecordActivity extends AppCompatActivity {
     private static RecordActivityViewModel viewModel;
     private static WeightTrainingRecordService recordService;
     private static WorkoutTypeService typeService;
+    private static boolean restServiceStarted = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,23 +76,21 @@ public class RecordActivity extends AppCompatActivity {
         typeService = new WorkoutTypeService(this.getApplication());
 
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                createRecordDialog(null, true);
-            }
-        });
+        fab.setOnClickListener(view -> createRecordDialog(null, true));
         listView = findViewById(R.id.list);
         WeightTrainingDetailSparseArrayAdapter adapter = new WeightTrainingDetailSparseArrayAdapter(this, getRecordArray());
         listView.setAdapter(adapter);
         registerForContextMenu(listView);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                viewModel.record = (WeightTrainingRecordDetail)parent.getAdapter().getItem(position);
-                createRecordDialog(viewModel.record, false);
-            }
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            viewModel.record = (WeightTrainingRecordDetail)parent.getAdapter().getItem(position);
+            createRecordDialog(viewModel.record, false);
         });
+
+        ImageButton refreshButton = findViewById(R.id.record_refresh_button);
+        refreshButton.setOnClickListener(view -> refreshList());
+
+        if (!restServiceStarted)
+            CreateRestService();
     }
 
     @Override
@@ -91,11 +109,11 @@ public class RecordActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.menu_edit:
                 createRecordDialog(recordDetail, true);
-                resetList();
+                refreshList();
                 return true;
             case R.id.menu_delete:
+                ((WeightTrainingDetailSparseArrayAdapter)listView.getAdapter()).removeItemAt(info.position);
                 recordService.deleteRecord(recordDetail.general);
-                resetList();
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -130,23 +148,22 @@ public class RecordActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        resetList();
+        refreshList();
     }
 
     private SparseArray<WeightTrainingRecordDetail> getRecordArray() {
         List<WeightTrainingRecordDetail> records = recordService.getAllDetails();
-        List<WeightTrainingRecordGeneral> general = recordService.getAllRecords();
         SparseArray<WeightTrainingRecordDetail> recordArray = new SparseArray<>();
         for (int i = 0; i < records.size(); i++) {
-            recordArray.put(i, records.get(i));
+            WeightTrainingRecordDetail record = records.get(i);
+            recordArray.put(record.general.recordId, record);
         }
         return recordArray;
     }
 
-    private void resetList() {
-        //this is horrendous, I need to set up notifying/updating properly
-        WeightTrainingDetailSparseArrayAdapter adapter = new WeightTrainingDetailSparseArrayAdapter(activity, getRecordArray());
-        listView.setAdapter(adapter);
+    private void refreshList() {
+        // This is better than the original implementation, but still not great
+        ((WeightTrainingDetailSparseArrayAdapter)listView.getAdapter()).refreshAdapter(getRecordArray());
     }
 
     private void createRecordDialog(@Nullable WeightTrainingRecordDetail recordDetail, boolean controlsEnabled) {
@@ -172,34 +189,21 @@ public class RecordActivity extends AppCompatActivity {
         binding.setLifecycleOwner(activity);
 
         Button saveButton = dialog.findViewById(R.id.dialog_save_button);
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (viewModel.record.general.recordId == null)
-                    recordService.saveRecord(viewModel.record.general);
-                else
-                    recordService.updateRecord(viewModel.record.general);
-                resetList();
-                viewModel.record = null;
-                dialog.dismiss();
-            }
+        saveButton.setOnClickListener(view -> {
+            if (viewModel.record.general.recordId == null)
+                recordService.saveRecord(viewModel.record.general);
+            else
+                recordService.updateRecord(viewModel.record.general);
+            refreshList();
+            viewModel.record = null;
+            dialog.dismiss();
         });
 
         Button editButton = dialog.findViewById(R.id.dialog_edit_button);
-        editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setControlsEnabled(dialog, true);
-            }
-        });
+        editButton.setOnClickListener(view -> setControlsEnabled(dialog, true));
 
         Button cancelButton = dialog.findViewById(R.id.dialog_cancel_button);
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
+        cancelButton.setOnClickListener(view -> dialog.dismiss());
         setControlsEnabled(dialog, controlsEnabled);
         dialog.show();
     }
@@ -212,5 +216,33 @@ public class RecordActivity extends AppCompatActivity {
         dialog.findViewById(R.id.dialog_date).setEnabled(isEnabled);
         dialog.findViewById(R.id.dialog_save_button).setVisibility(isEnabled ? View.VISIBLE : View.INVISIBLE);
         dialog.findViewById(R.id.dialog_edit_button).setVisibility(isEnabled ? View.INVISIBLE : View.VISIBLE);
+    }
+
+    private void CreateRestService() {
+        Gson gson = new GsonBuilder().create();
+        JavalinJson.setFromJsonMapper(gson::fromJson);
+        JavalinJson.setToJsonMapper(gson::toJson);
+
+        try {
+            Javalin app = Javalin.create(config -> config.registerPlugin(new RouteOverviewPlugin("/routes"))).start(PortUtility.getAssignedPort());
+
+            WorkoutTypeController workoutTypeController = new WorkoutTypeController(this.getApplication());
+            WeightTrainingController weightTrainingController = new WeightTrainingController(this.getApplication());
+
+            app.routes(() -> {
+                before(Filters.handleLocaleChange);
+                get(Path.Web.WORKOUT_TYPES, workoutTypeController.getAllWorkoutTypes);
+                post(Path.Web.WEIGHT_TRAINING, weightTrainingController.postWeightTrainingRecord);
+                after(Path.Web.WEIGHT_TRAINING, ctx -> refreshList());
+            });
+
+            restServiceStarted = true;
+        }
+        catch (Exception e) {
+            Context context = getApplicationContext();
+            int duration = Toast.LENGTH_SHORT;
+            Toast toast = Toast.makeText(context, "Failed to start sync service", duration);
+            toast.show();
+        }
     }
 }

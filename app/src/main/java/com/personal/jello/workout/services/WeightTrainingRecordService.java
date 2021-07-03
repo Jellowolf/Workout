@@ -31,6 +31,10 @@ public class WeightTrainingRecordService {
         weightTrainingRecordRepository.insertRecord(record);
     }
 
+    public void saveRecords(WeightTrainingRecordGeneral[] records) {
+        weightTrainingRecordRepository.insertRecords(records);
+    }
+
     public void updateRecord(WeightTrainingRecordGeneral record) {
         weightTrainingRecordRepository.updateRecord(record);
     }

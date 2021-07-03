@@ -32,4 +32,8 @@ public class WeightTrainingDetailSparseArrayAdapter extends SparseArrayAdapter<W
         result.setText(formattedRecord);
         return result;
     }
+
+    public void append(WeightTrainingRecordDetail recordDetail) {
+        append(recordDetail.general.recordId, recordDetail);
+    }
 }

@@ -86,6 +86,24 @@ public class WeightTrainingRecordRepository {
         }
     }
 
+    public void insertRecords(WeightTrainingRecordGeneral[] records) {
+        new insertsAsyncTask(weightTrainingRecordDao).execute(records);
+    }
+
+    private static class insertsAsyncTask extends AsyncTask<WeightTrainingRecordGeneral[], Void, Void> {
+        private WeightTrainingRecordDao weightTrainingAsyncTaskDao;
+
+        insertsAsyncTask(WeightTrainingRecordDao dao) {
+            weightTrainingAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(final WeightTrainingRecordGeneral[]... params) {
+            weightTrainingAsyncTaskDao.insert(params[0]);
+            return null;
+        }
+    }
+
     public void updateRecord(WeightTrainingRecordGeneral record) {
         new updateAsyncTask(weightTrainingRecordDao).execute(record);
     }

@@ -8,6 +8,9 @@
     <item type="id" name="menu_edit"/>
     <item type="id" name="menu_delete"/>
 
+    <!-- Record Activity -->
+    <item type="id" name="record_refresh_button"/>
+
     <!-- Add Record Dialog -->
     <item type="id" name="add_record_dialog_title"/>
     <item type="id" name="dialog_types"/>

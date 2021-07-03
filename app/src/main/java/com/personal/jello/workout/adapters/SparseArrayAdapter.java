@@ -31,4 +31,19 @@ public class SparseArrayAdapter<T> extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         return null;
     }
+
+    public void append(int key, T item) {
+        data.append(key, item);
+        notifyDataSetChanged();
+    }
+
+    public void removeItemAt(int position) {
+        data.removeAt(position);
+        notifyDataSetChanged();
+    }
+
+    public void refreshAdapter(SparseArray<T> data) {
+        setData(data);
+        notifyDataSetChanged();
+    }
 }
