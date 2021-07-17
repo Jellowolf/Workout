@@ -26,12 +26,20 @@ public class WorkoutTypeService {
         workoutTypeRepository.insertType(type);
     }
 
+    public void saveTypes(WorkoutType[] types) {
+        workoutTypeRepository.insertTypes(types);
+    }
+
     public void updateType(WorkoutType type) {
         workoutTypeRepository.updateType(type);
     }
 
     public void deleteType(WorkoutType type) {
         workoutTypeRepository.deleteType(type);
+    }
+
+    public void deleteAllTypes() {
+        workoutTypeRepository.deleteAllTypes();
     }
 
     public boolean checkIfDeleteValid(Integer typeId) {

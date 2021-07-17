@@ -9,7 +9,20 @@
         app:key="@string/workoutType"
         app:title="Manage Workout Types"
         app:summary="Add or remove available workout types"/>
-    <Preference/>
 
+    <Preference
+        app:key="@string/exportData"
+        app:title="Export Data"
+        app:summary="Save all data in CSV format"/>
+
+    <Preference
+        app:key="@string/importData"
+        app:title="Import Data"
+        app:summary="Load backed up CSV format data"/>
+
+    <Preference
+        app:key="@string/deleteDuplicateData"
+        app:title="Delete Duplicate Data"
+        app:summary="Remove all duplicate weight training records"/>
 
 </PreferenceScreen>

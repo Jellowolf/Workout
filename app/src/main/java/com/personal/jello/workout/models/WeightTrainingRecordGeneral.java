@@ -32,6 +32,17 @@ public class WeightTrainingRecordGeneral extends BaseObservable {
     @ColumnInfo(name = "date")
     public Calendar date;
 
+    public WeightTrainingRecordGeneral() {}
+
+    public WeightTrainingRecordGeneral(Integer recordId, Integer typeId, Integer sets, Integer reps, Double weight, Calendar date) {
+        this.recordId = recordId;
+        this.typeId = typeId;
+        this.sets = sets;
+        this.reps = reps;
+        this.weight = weight;
+        this.date = date;
+    }
+
     @Bindable
     public String getWeight() {
         return this.weight != null ? Double.toString(this.weight) : null;
@@ -87,5 +98,23 @@ public class WeightTrainingRecordGeneral extends BaseObservable {
 
     public void setYear(int value) {
         this.date.set(Calendar.YEAR, value);
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof WeightTrainingRecordGeneral))
+            return false;
+        WeightTrainingRecordGeneral typedObject = (WeightTrainingRecordGeneral)object;
+        if (!this.typeId.equals(typedObject.typeId))
+            return false;
+        if (!this.sets.equals(typedObject.sets))
+            return false;
+        if (!this.reps.equals(typedObject.reps))
+            return false;
+        if (!this.weight.equals(typedObject.weight))
+            return false;
+        if (this.date.compareTo(typedObject.date) != 0)
+            return false;
+        return true;
     }
 }

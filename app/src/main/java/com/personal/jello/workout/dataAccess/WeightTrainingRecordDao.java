@@ -16,7 +16,7 @@ public interface WeightTrainingRecordDao {
     @Query("SELECT * FROM WeightTrainingRecord")
     List<WeightTrainingRecordGeneral> getAll();
 
-    @Query("SELECT * FROM WeightTrainingRecord JOIN WorkoutType on WeightTrainingRecord.type_id = WorkoutType.typeId")
+    @Query("SELECT * FROM WeightTrainingRecord JOIN WorkoutType ON WeightTrainingRecord.type_id = WorkoutType.typeId")
     List<WeightTrainingRecordDetail> getAllDetails();
 
     @Insert
@@ -27,4 +27,7 @@ public interface WeightTrainingRecordDao {
 
     @Delete
     void delete(WeightTrainingRecordGeneral...records);
+
+    @Query("DELETE FROM WeightTrainingRecord")
+    void deleteAll();
 }

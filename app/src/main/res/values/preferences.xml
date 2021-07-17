@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="workoutType">workoutType</string>
+    <string name="exportData">exportData</string>
+    <string name="importData">importData</string>
+    <string name="deleteDuplicateData">deleteDuplicateData</string>
 </resources>

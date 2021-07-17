@@ -24,6 +24,9 @@ public interface WeightTrainingTypeDao {
     @Delete
     void delete(WorkoutType...types);
 
+    @Query("DELETE FROM WorkoutType")
+    void deleteAll();
+
     // There has gotta be a better way to do this -_-
     @Query("SELECT NOT EXISTS(SELECT 1 FROM WorkoutType INNER JOIN WeightTrainingRecord on WorkoutType.typeId = WeightTrainingRecord.type_id WHERE WorkoutType.typeId = :typeId)")
     boolean checkIfDeleteValid(int typeId);

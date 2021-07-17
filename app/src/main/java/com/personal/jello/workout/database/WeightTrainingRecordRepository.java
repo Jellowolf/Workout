@@ -139,4 +139,40 @@ public class WeightTrainingRecordRepository {
             return null;
         }
     }
+
+    public void deleteRecords(WeightTrainingRecordGeneral[] records) {
+        new deletesAsyncTask(weightTrainingRecordDao).execute(records);
+    }
+
+    private static class deletesAsyncTask extends AsyncTask<WeightTrainingRecordGeneral[], Void, Void> {
+        private WeightTrainingRecordDao weightTrainingAsyncTaskDao;
+
+        deletesAsyncTask(WeightTrainingRecordDao dao) {
+            weightTrainingAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(final WeightTrainingRecordGeneral[]... params) {
+            weightTrainingAsyncTaskDao.delete(params[0]);
+            return null;
+        }
+    }
+
+    public void deleteAllRecords() {
+        new deleteAllAsyncTask(weightTrainingRecordDao).execute();
+    }
+
+    private static class deleteAllAsyncTask extends AsyncTask<Void, Void, Void> {
+        private WeightTrainingRecordDao weightTrainingAsyncTaskDao;
+
+        deleteAllAsyncTask(WeightTrainingRecordDao dao) {
+            weightTrainingAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(final Void... params) {
+            weightTrainingAsyncTaskDao.deleteAll();
+            return null;
+        }
+    }
 }

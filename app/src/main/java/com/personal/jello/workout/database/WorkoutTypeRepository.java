@@ -60,6 +60,24 @@ public class WorkoutTypeRepository {
         }
     }
 
+    public void insertTypes(WorkoutType[] types) {
+        new insertsAsyncTask(weightTrainingTypeDao).execute(types);
+    }
+
+    private static class insertsAsyncTask extends AsyncTask<WorkoutType[], Void, Void> {
+        private WeightTrainingTypeDao weightTrainingAsyncTaskDao;
+
+        insertsAsyncTask(WeightTrainingTypeDao dao) {
+            weightTrainingAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(final WorkoutType[]... params) {
+            weightTrainingAsyncTaskDao.insert(params[0]);
+            return null;
+        }
+    }
+
     public void updateType(WorkoutType type) {
         new updateAsyncTask(weightTrainingTypeDao).execute(type);
     }
@@ -92,6 +110,24 @@ public class WorkoutTypeRepository {
         @Override
         protected Void doInBackground(final WorkoutType... params) {
             weightTrainingAsyncTaskDao.delete(params[0]);
+            return null;
+        }
+    }
+
+    public void deleteAllTypes() {
+        new deleteAllAsyncTask(weightTrainingTypeDao).execute();
+    }
+
+    private static class deleteAllAsyncTask extends AsyncTask<Void, Void, Void> {
+        private WeightTrainingTypeDao weightTrainingAsyncTaskDao;
+
+        deleteAllAsyncTask(WeightTrainingTypeDao dao) {
+            weightTrainingAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(final Void... params) {
+            weightTrainingAsyncTaskDao.deleteAll();
             return null;
         }
     }

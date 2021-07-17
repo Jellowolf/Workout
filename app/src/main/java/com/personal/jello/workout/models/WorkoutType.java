@@ -18,4 +18,11 @@ public class WorkoutType extends BaseObservable {
     public String toString() {
         return description;
     }
+
+    public WorkoutType() {}
+
+    public WorkoutType(Integer typeId, String description) {
+        this.typeId = typeId;
+        this.description = description;
+    }
 }

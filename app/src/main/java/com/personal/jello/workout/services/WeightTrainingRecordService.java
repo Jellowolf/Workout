@@ -42,4 +42,12 @@ public class WeightTrainingRecordService {
     public void deleteRecord(WeightTrainingRecordGeneral record) {
         weightTrainingRecordRepository.deleteRecord(record);
     }
+
+    public void deleteRecords(WeightTrainingRecordGeneral[] records) {
+        weightTrainingRecordRepository.deleteRecords(records);
+    }
+
+    public void deleteAllRecords() {
+        weightTrainingRecordRepository.deleteAllRecords();
+    }
 }
